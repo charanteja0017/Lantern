@@ -1,0 +1,222 @@
+# Strix web dashboard — full-stack deployment.
+#
+# Services:
+#   caddy     — TLS + reverse proxy (80/443 public)
+#   frontend  — Next.js dashboard (demo=false, talks to backend)
+#   api       — FastAPI backend
+#   postgres  — metadata/index store
+#   redis     — rate-limit + pub/sub
+#
+# All service-to-service traffic stays on the internal bridge network.
+# Only Caddy is exposed publicly.
+
+name: strix
+
+x-restart: &default-restart
+  restart: unless-stopped
+
+networks:
+  strix_net:
+    driver: bridge
+
+volumes:
+  strix_runs:
+  strix_pgdata:
+  strix_redis:
+  strix_caddy_data:
+  strix_caddy_config:
+
+services:
+  postgres:
+    <<: *default-restart
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-strix}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      POSTGRES_DB: ${POSTGRES_DB:-strix}
+    volumes:
+      - strix_pgdata:/var/lib/postgresql/data
+    networks: [strix_net]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    <<: *default-restart
+    image: redis:7-alpine
+    command:
+      - redis-server
+      - --appendonly
+      - "yes"
+      - --maxmemory
+      - "256mb"
+      - --maxmemory-policy
+      - "allkeys-lru"
+    volumes:
+      - strix_redis:/data
+    networks: [strix_net]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    <<: *default-restart
+    build:
+      context: ..
+      dockerfile: strix/api/Dockerfile
+    environment:
+      # Defaults to `development` so the stack boots on a fresh VPS without
+      # Clerk/LLM credentials. Switch to `production` (via deploy/.env) once
+      # you have configured auth + an LLM provider through the admin UI.
+      STRIX_ENV: ${STRIX_ENV:-development}
+      STRIX_LOG_LEVEL: ${STRIX_LOG_LEVEL:-INFO}
+      STRIX_ALLOWED_ORIGINS: ${STRIX_ALLOWED_ORIGINS:-*}
+      STRIX_TRUSTED_HOSTS: ${STRIX_TRUSTED_HOSTS:-*}
+      STRIX_RUNS_DIR: /data/strix_runs
+      STRIX_DATABASE_URL: postgresql://${POSTGRES_USER:-strix}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-strix}
+      STRIX_REDIS_URL: redis://redis:6379/0
+      # Clerk: set all of these in deploy/.env from https://dashboard.clerk.com
+      # (API Keys + JWT / instance URLs). Leave empty for STRIX_ENV=development
+      # to run without JWT auth (demo principal); production requires them.
+      CLERK_ISSUER: ${CLERK_ISSUER:-}
+      CLERK_AUDIENCE: ${CLERK_AUDIENCE:-}
+      CLERK_JWKS_URL: ${CLERK_JWKS_URL:-}
+      # Used by the API to look up a user's email from their Clerk ``sub``
+      # when the session JWT doesn't include it. Optional if you only use
+      # STRIX_ADMIN_USER_IDS for platform-admin elevation.
+      CLERK_SECRET_KEY: ${CLERK_SECRET_KEY:-}
+      # Comma-separated emails → platform-admin on sign-in (match Clerk user).
+      STRIX_ADMIN_EMAILS: ${STRIX_ADMIN_EMAILS:-}
+      # Comma-separated Clerk user IDs (``user_…``) → platform-admin.
+      STRIX_ADMIN_USER_IDS: ${STRIX_ADMIN_USER_IDS:-}
+      STRIX_LLM_RPM_DEFAULT: ${STRIX_LLM_RPM_DEFAULT:-50}
+      STRIX_LLM_TPM_DEFAULT: ${STRIX_LLM_TPM_DEFAULT:-30000}
+      STRIX_LLM_CONCURRENCY_DEFAULT: ${STRIX_LLM_CONCURRENCY_DEFAULT:-4}
+      STRIX_CHECKPOINT_INTERVAL: ${STRIX_CHECKPOINT_INTERVAL:-15}
+      # --- Agent sandbox runtime --------------------------------------------
+      # The web API launches the `strix` CLI as a subprocess, which in turn
+      # uses the mounted Docker socket to spawn a *sibling* sandbox container
+      # from this image. Anything bundled in that image (nmap, caido, the
+      # browser, etc.) becomes available to the agents running a scan — which
+      # is the same toolset the terminal CLI gets from `scripts/install.sh`.
+      STRIX_IMAGE: ${STRIX_IMAGE:-ghcr.io/maramharsha/novahunter-sandbox:latest}
+      STRIX_RUNTIME_BACKEND: docker
+      # Sandbox tool-server ports are published on the *host* loopback.
+      # From inside this container, "127.0.0.1" is our own namespace, not the
+      # host's — point the CLI at host.docker.internal so tool-server health
+      # checks and agent calls actually reach the sandbox.
+      STRIX_SANDBOX_HOST: ${STRIX_SANDBOX_HOST:-host.docker.internal}
+      STRIX_SANDBOX_FALLBACK_HOSTS: ${STRIX_SANDBOX_FALLBACK_HOSTS:-}
+      # --- LLM configuration ------------------------------------------------
+      # ``STRIX_LLM`` is the canonical env name read by the Strix CLI / config
+      # (see strix/config/config.py). ``LLM_MODEL`` is kept for back-compat
+      # with older deploy/.env files; the API container normalises it onto
+      # ``STRIX_LLM`` if only the legacy name is set.
+      STRIX_LLM: ${STRIX_LLM:-${LLM_MODEL:-}}
+      LLM_MODEL: ${LLM_MODEL:-${STRIX_LLM:-}}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      LLM_API_BASE: ${LLM_API_BASE:-}
+      STRIX_REASONING_EFFORT: ${STRIX_REASONING_EFFORT:-high}
+      PERPLEXITY_API_KEY: ${PERPLEXITY_API_KEY:-}
+    # The sandbox container is spawned on the *host* Docker daemon and binds
+    # its tool-server port to host 127.0.0.1. The API needs to reach that
+    # port, so we map host.docker.internal to the host gateway.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    # The API image runs as the unprivileged ``strix`` user (uid 10001). The
+    # host socket is root:docker mode 0660, so we add the container process
+    # to a supplementary group matching the host's docker GID. ``DOCKER_GID``
+    # is auto-detected by scripts/setup.sh (``getent group docker | cut -d:
+    # -f3``). 999 is the most common default on Debian/Ubuntu — adjust in
+    # .env if ``/var/run/docker.sock`` is owned by a different GID.
+    group_add:
+      - "${DOCKER_GID:-999}"
+    volumes:
+      - strix_runs:/data/strix_runs
+      # rw (no :ro) is required — spawning sibling containers via the Docker
+      # socket is a write operation from the daemon's point of view.
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks: [strix_net]
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/healthz"]
+      # On a fresh boot the API worker needs to import the full stack, open
+      # asyncpg/redis pools, and run ensure_schema() before it can answer a
+      # request. A generous start_period prevents early 0s-0s probe failures
+      # from tripping `service_unhealthy` before uvicorn is even bound.
+      start_period: 45s
+      start_interval: 5s
+      interval: 20s
+      timeout: 5s
+      retries: 10
+
+  frontend:
+    <<: *default-restart
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+      # IMPORTANT: Next.js bakes every `NEXT_PUBLIC_*` value into the client
+      # bundle at *build* time. Changing these under `environment:` below only
+      # affects the running container, not the JS that gets shipped to the
+      # browser. To switch between demo / live mode, update these args and
+      # rebuild the image (`docker compose up -d --build frontend`).
+      args:
+        NEXT_PUBLIC_DEMO: ${NEXT_PUBLIC_DEMO:-false}
+        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-/api}
+        NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME:-NovaHunter}
+        # Clerk publishable key (pk_test_… / pk_live_…). Set in deploy/.env;
+        # empty is allowed for dev builds when testing without auth UI.
+        NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:-}
+    environment:
+      NODE_ENV: production
+      # Server-side Clerk secret (sk_test_… / sk_live_…). Set in deploy/.env.
+      CLERK_SECRET_KEY: ${CLERK_SECRET_KEY:-}
+    depends_on:
+      api:
+        condition: service_healthy
+    networks: [strix_net]
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
+      # Next.js standalone server starts fast, but give it a cushion so slow
+      # VPS disks don't flake the first boot.
+      start_period: 30s
+      start_interval: 5s
+      interval: 20s
+      timeout: 5s
+      retries: 10
+
+  caddy:
+    <<: *default-restart
+    image: caddy:2-alpine
+    ports:
+      - "${NOVA_HTTP_PORT:-80}:80"
+      - "443:443"
+    environment:
+      STRIX_DOMAIN: ${STRIX_DOMAIN:-localhost}
+      STRIX_TLS_EMAIL: ${STRIX_TLS_EMAIL:-internal}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - strix_caddy_data:/data
+      - strix_caddy_config:/config
+    depends_on:
+      - frontend
+      - api
+    networks: [strix_net]
+    # Caddy does not expose a dedicated health path; hit the proxied
+    # frontend /api/health endpoint through the local listener, which also
+    # validates the routing config.
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:80/api/health"]
+      start_period: 20s
+      start_interval: 5s
+      interval: 30s
+      timeout: 5s
+      retries: 10

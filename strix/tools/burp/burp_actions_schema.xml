@@ -1,0 +1,39 @@
+<tools>
+  <tool name="burp_proxy_history">
+    <description>Fetch Burp proxy history entries.</description>
+    <parameters>
+      <parameter name="filter" type="string" required="false">Optional history filter.</parameter>
+    </parameters>
+  </tool>
+  <tool name="burp_send_to_repeater">
+    <description>Send an HTTP request to Burp Repeater.</description>
+    <parameters>
+      <parameter name="request" type="string" required="true">Raw HTTP request.</parameter>
+    </parameters>
+  </tool>
+  <tool name="burp_intruder_run">
+    <description>Run a Burp intruder payload sweep.</description>
+    <parameters>
+      <parameter name="template" type="string" required="true">Intruder template.</parameter>
+      <parameter name="payload_set" type="array" required="true">Payload list.</parameter>
+      <parameter name="mode" type="string" required="false">sniper/pitchfork/clusterbomb.</parameter>
+    </parameters>
+  </tool>
+  <tool name="burp_collaborator_generate">
+    <description>Generate a Burp Collaborator payload token/domain.</description>
+    <parameters />
+  </tool>
+  <tool name="burp_collaborator_poll">
+    <description>Poll collaborator interactions for a token.</description>
+    <parameters>
+      <parameter name="token" type="string" required="true">Collaborator token.</parameter>
+    </parameters>
+  </tool>
+  <tool name="burp_scope">
+    <description>Manage Burp scope (add/remove/list).</description>
+    <parameters>
+      <parameter name="action" type="string" required="true">add|remove|list</parameter>
+      <parameter name="value" type="string" required="false">Scope value for add/remove.</parameter>
+    </parameters>
+  </tool>
+</tools>

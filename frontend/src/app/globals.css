@@ -1,0 +1,366 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-sans: "Inter", system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+    --radius: 0.75rem;
+
+    --background: 222 47% 4%;
+    --foreground: 210 40% 98%;
+    --surface: 222 47% 7%;
+    --surface-2: 222 47% 10%;
+
+    --card: 222 47% 7%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 8%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 190 95% 55%;
+    --primary-foreground: 222 47% 8%;
+
+    --secondary: 222 32% 16%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 222 32% 14%;
+    --muted-foreground: 215 20% 70%;
+
+    --accent: 190 95% 55%;
+    --accent-foreground: 222 47% 8%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 222 32% 16%;
+    --input: 222 32% 14%;
+    --ring: 190 95% 55%;
+
+    --sev-critical: 0 84% 60%;
+    --sev-high: 22 92% 58%;
+    --sev-medium: 45 96% 58%;
+    --sev-low: 199 95% 60%;
+    --sev-info: 215 20% 70%;
+  }
+
+  .light {
+    --background: 210 40% 99%;
+    --foreground: 222 47% 11%;
+    --surface: 210 40% 97%;
+    --surface-2: 210 40% 94%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 190 95% 40%;
+    --primary-foreground: 210 40% 99%;
+    --secondary: 210 40% 94%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 40% 94%;
+    --muted-foreground: 215 16% 40%;
+    --accent: 190 95% 40%;
+    --accent-foreground: 210 40% 99%;
+    --destructive: 0 84% 50%;
+    --destructive-foreground: 210 40% 99%;
+    --border: 214 32% 88%;
+    --input: 214 32% 88%;
+    --ring: 190 95% 40%;
+  }
+
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+  html,
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+  body {
+    min-height: 100vh;
+    background:
+      radial-gradient(1000px 600px at 0% 0%, hsl(var(--primary) / 0.06), transparent 60%),
+      radial-gradient(900px 500px at 100% 0%, hsl(190 95% 55% / 0.04), transparent 60%),
+      hsl(var(--background));
+  }
+  *::selection {
+    background: hsl(var(--primary) / 0.35);
+    color: hsl(var(--foreground));
+  }
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply rounded-xl border border-border bg-card/80 backdrop-blur-sm shadow-card;
+  }
+  .grid-background {
+    background-image:
+      linear-gradient(hsl(var(--border) / 0.5) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border) / 0.5) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: radial-gradient(ellipse at 50% 0%, #000 40%, transparent 80%);
+  }
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .aurora {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .aurora::before,
+  .aurora::after {
+    content: "";
+    position: absolute;
+    width: 60rem;
+    height: 60rem;
+    border-radius: 9999px;
+    filter: blur(120px);
+    opacity: 0.35;
+    animation: auroraShift 22s linear infinite;
+  }
+  .aurora::before {
+    background: radial-gradient(circle at 30% 30%, hsl(190 95% 55% / 0.55), transparent 60%);
+    top: -20rem;
+    left: -15rem;
+  }
+  .aurora::after {
+    background: radial-gradient(circle at 70% 70%, hsl(265 85% 60% / 0.45), transparent 60%);
+    bottom: -25rem;
+    right: -20rem;
+    animation-duration: 28s;
+    animation-direction: reverse;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(hsl(var(--border) / 0.6) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border) / 0.6) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 80% 50% at 50% 0%, #000 35%, transparent 75%);
+    pointer-events: none;
+  }
+
+  .shimmer-text {
+    background: linear-gradient(
+      110deg,
+      hsl(var(--foreground)) 30%,
+      hsl(var(--primary)) 55%,
+      hsl(var(--foreground)) 80%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 5s linear infinite;
+  }
+
+  .gradient-border {
+    position: relative;
+    isolation: isolate;
+  }
+  .gradient-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(
+      from 0deg,
+      hsl(var(--primary) / 0.8),
+      hsl(265 85% 60% / 0.6),
+      hsl(190 95% 55% / 0.6),
+      hsl(var(--primary) / 0.8)
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: rotate-border 6s linear infinite;
+    pointer-events: none;
+  }
+
+  .marquee {
+    display: flex;
+    gap: 3rem;
+    animation: marquee 40s linear infinite;
+    width: max-content;
+  }
+
+  .fade-up {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 700ms ease,
+      transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .fade-up.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes auroraShift {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(40px, -30px) rotate(180deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(360deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes rotate-border {
+  to {
+    --tw-rotate: 360deg;
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes caret-blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-caret {
+  animation: caret-blink 1s steps(2, end) infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* ---- 404 page animations --------------------------------------------- */
+@keyframes aurora-drift {
+  0%,
+  100% {
+    transform: translate(-50%, 0) scale(1);
+    opacity: 0.75;
+  }
+  50% {
+    transform: translate(-48%, 20px) scale(1.05);
+    opacity: 1;
+  }
+}
+@keyframes aurora-drift-reverse {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.65;
+  }
+  50% {
+    transform: translate(-20px, -30px) scale(1.08);
+    opacity: 0.9;
+  }
+}
+
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Subtle glitch offsets on the 404 glyph. `steps()` gives the digital twitch
+   feel rather than smooth interpolation. */
+@keyframes glitch-a {
+  0%,
+  87%,
+  100% {
+    transform: translate(0, 0);
+    opacity: 0.55;
+  }
+  88% {
+    transform: translate(-2px, 1px);
+    opacity: 0.85;
+  }
+  90% {
+    transform: translate(3px, -2px);
+    opacity: 0.4;
+  }
+  92% {
+    transform: translate(-1px, 2px);
+    opacity: 0.75;
+  }
+  94% {
+    transform: translate(0, 0);
+    opacity: 0.55;
+  }
+}
+
+@keyframes glitch-b {
+  0%,
+  85%,
+  100% {
+    transform: translate(0, 0);
+    opacity: 0.45;
+  }
+  86% {
+    transform: translate(2px, -1px);
+    opacity: 0.7;
+  }
+  89% {
+    transform: translate(-3px, 2px);
+    opacity: 0.3;
+  }
+  93% {
+    transform: translate(1px, -1px);
+    opacity: 0.65;
+  }
+  95% {
+    transform: translate(0, 0);
+    opacity: 0.45;
+  }
+}

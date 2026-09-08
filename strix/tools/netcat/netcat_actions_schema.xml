@@ -1,0 +1,32 @@
+<tools>
+  <tool name="netcat_listen">
+    <description>Start a TCP listener and return its reachable address.</description>
+    <parameters>
+      <parameter name="port" type="number" required="false">Optional fixed port.</parameter>
+    </parameters>
+  </tool>
+  <tool name="netcat_read">
+    <description>Read data received by a listener.</description>
+    <parameters>
+      <parameter name="listener_id" type="string" required="true">Listener id from netcat_listen.</parameter>
+      <parameter name="timeout" type="number" required="false">Wait timeout in seconds.</parameter>
+    </parameters>
+  </tool>
+  <tool name="netcat_send">
+    <description>Send bytes to all connected clients on a listener.</description>
+    <parameters>
+      <parameter name="listener_id" type="string" required="true">Listener id.</parameter>
+      <parameter name="data" type="string" required="true">Text payload to send.</parameter>
+    </parameters>
+  </tool>
+  <tool name="netcat_close">
+    <description>Close a TCP listener.</description>
+    <parameters>
+      <parameter name="listener_id" type="string" required="true">Listener id.</parameter>
+    </parameters>
+  </tool>
+  <tool name="netcat_listeners">
+    <description>List active netcat listeners.</description>
+    <parameters />
+  </tool>
+</tools>

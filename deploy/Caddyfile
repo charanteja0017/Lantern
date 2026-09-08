@@ -1,0 +1,85 @@
+# NovaHunter reverse proxy (HTTP-only, zero-config).
+#
+# Listens on :80 for any hostname / bare IP. This keeps the installer
+# dependency-free: no DNS / ACME / TLS setup is required to bring the
+# stack up on a fresh VPS.
+#
+# To enable HTTPS later:
+#   1. Point a DNS A record at the host.
+#   2. Replace the `:80 { ... }` block below with `your.domain.tld { ... }`
+#      and set STRIX_TLS_EMAIL in deploy/.env.
+#   3. `docker compose restart caddy`.
+#
+# Routing contract:
+# - /api/health           -> frontend (Next.js route handler, cheap status ping)
+# - /api/*                -> FastAPI
+# - /healthz, /readyz     -> FastAPI liveness / readiness
+# - /ws, /ws/*            -> FastAPI (websockets / SSE)
+# - everything else       -> Next.js (including /docs, /health dashboard, …)
+#
+# Adds hardened security headers. FastAPI's Swagger UI stays at /api/docs
+# in non-production.
+
+{
+    email {$STRIX_TLS_EMAIL:internal}
+    auto_https off
+}
+
+:80 {
+    encode zstd gzip
+
+    # Match any sidechannel path that the dashboard intentionally embeds in
+    # an iframe (current ``/api/runs/*/vnc`` and legacy ``/runs/*/(vnc|...)``).
+    # These paths must NOT receive ``X-Frame-Options: DENY`` from the global
+    # header block — otherwise the iframe is blocked even on error responses.
+    @embeddable path_regexp emb ^(/api/runs/[^/]+/vnc(/.*)?|/runs/[^/]+/(vnc|shell|burp|ovpn|listeners)(/.*)?)$
+    @not_embeddable {
+        not path_regexp emb ^(/api/runs/[^/]+/vnc(/.*)?|/runs/[^/]+/(vnc|shell|burp|ovpn|listeners)(/.*)?)$
+    }
+
+    # Hardened security headers for normal traffic (not for embedded panels).
+    header @not_embeddable {
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "geolocation=(), microphone=(), camera=()"
+        -Server
+    }
+    # Lighter headers for embeddable panels (no DENY, no Server leak).
+    header @embeddable {
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        -X-Frame-Options
+        -Server
+    }
+
+    # Frontend owns /api/health specifically — route it before the broader
+    # /api/* rule so FastAPI doesn't 404 on it.
+    @frontend_api path /api/health
+    reverse_proxy @frontend_api frontend:3000 {
+        header_up X-Forwarded-Proto {scheme}
+        header_up X-Forwarded-For  {remote_host}
+    }
+
+    @api {
+        path /api/* /healthz /readyz /ws /ws/*
+    }
+    reverse_proxy @api api:8000 {
+        flush_interval -1
+        header_up X-Forwarded-Proto {scheme}
+        header_up X-Forwarded-For  {remote_host}
+    }
+
+    # Side-channel passthroughs (live browser / burp / vpn / listener panels).
+    @sidechannels path_regexp sc ^/runs/[^/]+/(vnc|shell|burp|ovpn|listeners)(/.*)?$
+    reverse_proxy @sidechannels api:8000 {
+        flush_interval -1
+        header_up X-Forwarded-Proto {scheme}
+        header_up X-Forwarded-For  {remote_host}
+    }
+
+    reverse_proxy frontend:3000 {
+        header_up X-Forwarded-Proto {scheme}
+        header_up X-Forwarded-For  {remote_host}
+    }
+}

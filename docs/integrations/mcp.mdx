@@ -1,0 +1,54 @@
+# MCP Integration
+
+NovaHunter supports both MCP server and MCP client modes.
+
+## NovaHunter as MCP Server
+
+- Transport: `stdio` (default) and `HTTP+SSE`.
+- Entry point: `python -m strix.mcp.server --transport stdio`
+- SSE endpoint: `/mcp/sse`
+- Personal access tokens can be created from `/api/mcp/tokens`.
+
+### Claude Desktop example
+
+```json
+{
+  "mcpServers": {
+    "novahunter": {
+      "command": "python",
+      "args": ["-m", "strix.mcp.server", "--transport", "stdio"]
+    }
+  }
+}
+```
+
+### Cursor example
+
+```json
+{
+  "name": "novahunter",
+  "transport": "http+sse",
+  "url": "https://your-host/api/mcp/sse",
+  "headers": {
+    "Authorization": "Bearer nh_pat_***"
+  }
+}
+```
+
+## NovaHunter as MCP Client
+
+- Curated gallery endpoint: `/api/mcp/gallery`
+- Custom MCP endpoint: `/api/mcp/custom`
+- Run-time override can be passed in run instructions using a custom block:
+
+```text
+[mcp_servers]
+github,pinecone,custom:acme-internal
+[/mcp_servers]
+```
+
+## Security Notes
+
+- Scope each PAT to a specific operator/workspace and rotate frequently.
+- Prefer short-lived HTTPS credentials and avoid storing secrets in prompts.
+- Keep custom MCP servers allowlisted and pinned to known hostnames.

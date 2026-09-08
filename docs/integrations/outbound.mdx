@@ -1,0 +1,47 @@
+# Outbound Integrations
+
+NovaHunter can push security events to external systems through pluggable integrations.
+
+## Supported Kinds
+
+- `webhook`
+- `slack`
+- `discord`
+- `jira` (generic webhook-style payload for now)
+- `github_issues` (generic webhook-style payload for now)
+
+## Admin API
+
+- `GET /api/admin/integrations`
+- `PUT /api/admin/integrations`
+- `DELETE /api/admin/integrations/{id}`
+- `POST /api/admin/integrations/{id}/test`
+
+Payload fields:
+
+- `id` (optional for create)
+- `kind` (`webhook|slack|discord|jira|github_issues`)
+- `name`
+- `endpoint_url`
+- `secret_ref` (optional `secret://...`, used for HMAC signature)
+- `enabled`
+- `metadata` (provider-specific options)
+
+## Security
+
+When `secret_ref` is configured, outbound requests include:
+
+- `X-Strix-Timestamp`
+- `X-Strix-Nonce`
+- `X-Strix-Signature` (HMAC-SHA256 over `timestamp.nonce.body`)
+
+This supports replay protection and signature verification on your receiver.
+
+## Event Hooks (current)
+
+- `finding.triage.updated`
+- `finding.retest.requested`
+- `run.completed` (stop/kill paths)
+
+Additional hooks like `finding.created` and `finding.severity_upgraded` can be wired
+from the tracer event stream in a future incremental pass.

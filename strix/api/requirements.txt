@@ -1,0 +1,14 @@
+# Extra dependencies required only by the web API service.
+# The core Strix package supplies everything else (see pyproject.toml).
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+sse-starlette>=2.1.0
+httpx>=0.28.0
+websockets>=13.0
+python-jose[cryptography]>=3.3.0
+
+# Datastore drivers. Without these the API falls back to file-only mode and
+# the health dashboard reports "asyncpg pool unavailable" / similar — the
+# services/db.py helpers catch ImportError and return None by design.
+asyncpg>=0.29.0
+redis>=5.0.0

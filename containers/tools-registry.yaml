@@ -1,0 +1,23 @@
+tools:
+  proxy:
+    - caido
+    - burp-community
+  recon:
+    - nmap
+    - nuclei
+    - subfinder
+    - naabu
+    - httpx
+    - ffuf
+  web:
+    - zaproxy
+    - sqlmap
+    - dirsearch
+    - arjun
+  shell:
+    - tmux
+    - shellinabox
+  remote:
+    - openvpn
+    - novnc
+    - tightvnc

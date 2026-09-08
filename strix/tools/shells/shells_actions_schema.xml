@@ -1,0 +1,40 @@
+<tools>
+  <tool name="spawn_shell">
+    <description>Create or reuse a persistent shell session.</description>
+    <parameters>
+      <parameter name="name" type="string" required="false">Shell name/id (default: "default").</parameter>
+      <parameter name="cwd" type="string" required="false">Requested working directory.</parameter>
+      <parameter name="env" type="object" required="false">Requested environment variables map.</parameter>
+    </parameters>
+  </tool>
+
+  <tool name="write_shell">
+    <description>Send input to an existing shell session.</description>
+    <parameters>
+      <parameter name="shell_id" type="string" required="true">Target shell id.</parameter>
+      <parameter name="input" type="string" required="true">Input text or key sequence.</parameter>
+      <parameter name="no_enter" type="boolean" required="false">If true, do not append enter.</parameter>
+    </parameters>
+  </tool>
+
+  <tool name="read_shell">
+    <description>Read current shell output without sending a command.</description>
+    <parameters>
+      <parameter name="shell_id" type="string" required="true">Target shell id.</parameter>
+      <parameter name="timeout" type="number" required="false">Read timeout in seconds.</parameter>
+    </parameters>
+  </tool>
+
+  <tool name="list_shells">
+    <description>List available persistent shell sessions.</description>
+    <parameters />
+  </tool>
+
+  <tool name="close_shell">
+    <description>Close a persistent shell session.</description>
+    <parameters>
+      <parameter name="shell_id" type="string" required="true">Target shell id to close.</parameter>
+    </parameters>
+  </tool>
+</tools>
+

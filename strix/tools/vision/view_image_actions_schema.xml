@@ -1,0 +1,38 @@
+<tools>
+  <tool name="view_image">
+    <description>Load an image from the sandbox filesystem and surface it to the agent as a multimodal observation. Use this after a tool writes an image to disk (screenshots saved to a custom path, downloaded evidence, tool-generated diagrams, etc.) when you need to *see* the image rather than describe it via a text tool.</description>
+    <details>Supported formats: PNG, JPEG, GIF, WebP. The file is base64-encoded and returned on the standard multimodal channel; the executor attaches it to the next agent turn so the vision-capable model can analyze it directly.
+
+Key operational guidance:
+- Paths resolve inside the sandbox (same filesystem view every other sandbox tool sees). Use absolute paths.
+- A size cap (default 10 MiB) protects the context window. Oversized images fail with a clear error; run the image through `terminal_execute` + ImageMagick (`convert -resize`) or similar to shrink first.
+- Prefer this tool over re-rendering HAR / DOM dumps when the finding depends on *visual* state (rendered XSS payload, admin panel, 2FA QR, login captcha, etc.).
+- Does NOT navigate a browser. Use `browser_goto` + screenshot for live pages; use `view_image` for images already on disk.</details>
+    <parameters>
+      <parameter name="path" type="string" required="true">
+        <description>Absolute path to the image file inside the sandbox (e.g. /workspace/evidence/login-reflected-xss.png)</description>
+      </parameter>
+      <parameter name="note" type="string" required="false">
+        <description>Optional context to attach alongside the image in the observation (e.g. "reflected payload in search field")</description>
+      </parameter>
+      <parameter name="max_bytes" type="integer" required="false">
+        <description>Per-call override for the size cap in bytes. Default 10485760 (10 MiB). Values above 20 MiB are clamped.</description>
+      </parameter>
+    </parameters>
+    <returns type="Dict[str, Any]">
+      <description>A dict carrying the base64-encoded image on the ``image_base64`` key plus ``mime_type``, ``path``, and ``bytes``. On error the dict contains an ``error`` key and no image payload.</description>
+    </returns>
+    <examples>
+  # Reviewing a screenshot saved to disk by another tool
+  <function=view_image>
+  <parameter=path>/workspace/evidence/reflected-xss.png</parameter>
+  <parameter=note>Payload ?q=&lt;svg onload=alert(1)&gt; reflected in the search results</parameter>
+  </function>
+
+  # Looking at a captured login form screenshot
+  <function=view_image>
+  <parameter=path>/workspace/evidence/login-form.jpg</parameter>
+  </function>
+    </examples>
+  </tool>
+</tools>

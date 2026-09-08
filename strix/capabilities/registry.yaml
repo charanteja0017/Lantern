@@ -1,0 +1,15 @@
+- id: nuclei-templates
+  name: Nuclei Templates
+  description: Installs and updates community nuclei templates.
+  install:
+    command: "nuclei -update-templates"
+- id: ffuf
+  name: FFUF
+  description: Directory and endpoint fuzzing wordlists.
+  install:
+    command: "apt-get update && apt-get install -y ffuf"
+- id: sqlmap
+  name: sqlmap
+  description: SQL injection testing toolkit.
+  install:
+    command: "apt-get update && apt-get install -y sqlmap"

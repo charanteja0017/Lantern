@@ -1,0 +1,23 @@
+# Retention and Storage Hygiene
+
+NovaHunter keeps run artifacts under `STRIX_RUNS_DIR` (default `strix_runs`).
+To keep VPS disks healthy, the API runs a background retention sweep.
+
+## Defaults
+
+- `STRIX_RETENTION_DAYS=90`
+- `STRIX_RETENTION_SWEEP_SECONDS=86400` (daily)
+- `STRIX_RUN_MAX_EVIDENCE_BYTES=5368709120` (5 GB per run evidence/artifacts dir)
+
+## What Gets Cleaned
+
+- Run directories older than `STRIX_RETENTION_DAYS` are deleted.
+- For active runs, if `evidence`, `artifacts`, or `attachments` exceeds the
+  per-run cap, oldest files are deleted first until usage drops under the cap.
+
+## Notes
+
+- Set `STRIX_RETENTION_DAYS=0` only for local debugging (not recommended in prod).
+- Keep retention aligned with legal/compliance requirements for customer data.
+- If you use external object storage for evidence, you can keep a smaller local
+  retention window and archive evidence out-of-band.
