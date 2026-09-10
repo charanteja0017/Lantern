@@ -1,29 +1,121 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#22d3ee"/>
-      <stop offset="100%" stop-color="#3b82f6"/>
-    </linearGradient>
-    <radialGradient id="flame" cx="50%" cy="45%" r="60%">
-      <stop offset="0%" stop-color="#fde68a"/>
-      <stop offset="55%" stop-color="#fbbf24"/>
-      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+    <radialGradient id="core" cx="0.5" cy="0.58" r="0.62" fx="0.5" fy="0.58">
+      <stop offset="0"    stop-color="#ff9a6b"/>
+      <stop offset="0.12" stop-color="#fb6f77"/>
+      <stop offset="0.28" stop-color="#dd4fa4"/>
+      <stop offset="0.44" stop-color="#9a4fe6"/>
+      <stop offset="0.60" stop-color="#5359f2"/>
+      <stop offset="0.78" stop-color="#2c3ad4"/>
+      <stop offset="1"    stop-color="#141f8f"/>
     </radialGradient>
+    <linearGradient id="vert" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0"    stop-color="#9a9bff" stop-opacity="0.5"/>
+      <stop offset="0.30" stop-color="#9a9bff" stop-opacity="0"/>
+      <stop offset="0.80" stop-color="#000028" stop-opacity="0"/>
+      <stop offset="1"    stop-color="#000028" stop-opacity="0.5"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0"    stop-color="#000" stop-opacity="0.62"/>
+      <stop offset="0.24" stop-color="#000" stop-opacity="0"/>
+      <stop offset="0.76" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1"    stop-color="#000" stop-opacity="0.62"/>
+    </linearGradient>
+    <linearGradient id="inner" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7676f6"/>
+      <stop offset="0.5" stop-color="#2c2fa2"/>
+      <stop offset="1" stop-color="#06082c"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8f99ff"/>
+      <stop offset="1" stop-color="#4855e6"/>
+    </linearGradient>
+    <radialGradient id="bloomg" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ff5a6e" stop-opacity="0.55"/>
+      <stop offset="0.5" stop-color="#7a4bff" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#3344ff" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="bodyClip"><path d="M70 50 L70 192 A50 14 0 0 0 170 192 L170 50 A50 14 0 0 0 70 50 Z"/></clipPath>
+    <clipPath id="innerClip"><ellipse cx="120" cy="50" rx="45.5" ry="12"/></clipPath>
   </defs>
 
-  <!-- handle -->
-  <path d="M16 8 Q20 2 24 8" stroke="url(#g)" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <rect width="240" height="240" rx="44" fill="#050509"/>
 
-  <!-- cap -->
-  <path d="M16 8 H24 L31 12 H9 Z" fill="url(#g)" opacity="0.25" stroke="url(#g)" stroke-width="1.3" stroke-linejoin="round"/>
+  <ellipse cx="120" cy="127.0" rx="90" ry="105.0" fill="url(#bloomg)"/>
 
-  <!-- body -->
-  <rect x="9" y="12" width="22" height="17" rx="4" fill="url(#g)" opacity="0.15" stroke="url(#g)" stroke-width="1.8"/>
+  <path d="M70 50 L70 192 A50 14 0 0 0 170 192 L170 50 A50 14 0 0 0 70 50 Z" fill="url(#core)"/>
+  <path d="M70 50 L70 192 A50 14 0 0 0 170 192 L170 50 A50 14 0 0 0 70 50 Z" fill="url(#vert)"/>
+  <g clip-path="url(#bodyClip)">
+    <line x1="70.24" y1="36" x2="70.24" y2="206" stroke="#fff" stroke-opacity="0.119" stroke-width="0.50"/>
+    <line x1="70.72" y1="36" x2="70.72" y2="206" stroke="#000" stroke-opacity="0.193" stroke-width="0.62"/>
+    <line x1="72.15" y1="36" x2="72.15" y2="206" stroke="#fff" stroke-opacity="0.179" stroke-width="0.50"/>
+    <line x1="73.58" y1="36" x2="73.58" y2="206" stroke="#000" stroke-opacity="0.241" stroke-width="0.62"/>
+    <line x1="75.90" y1="36" x2="75.90" y2="206" stroke="#fff" stroke-opacity="0.235" stroke-width="0.71"/>
+    <line x1="78.22" y1="36" x2="78.22" y2="206" stroke="#000" stroke-opacity="0.287" stroke-width="0.88"/>
+    <line x1="81.35" y1="36" x2="81.35" y2="206" stroke="#fff" stroke-opacity="0.286" stroke-width="0.95"/>
+    <line x1="84.46" y1="36" x2="84.46" y2="206" stroke="#000" stroke-opacity="0.328" stroke-width="1.19"/>
+    <line x1="88.28" y1="36" x2="88.28" y2="206" stroke="#fff" stroke-opacity="0.329" stroke-width="1.16"/>
+    <line x1="92.07" y1="36" x2="92.07" y2="206" stroke="#000" stroke-opacity="0.363" stroke-width="1.45"/>
+    <line x1="96.43" y1="36" x2="96.43" y2="206" stroke="#fff" stroke-opacity="0.363" stroke-width="1.32"/>
+    <line x1="100.76" y1="36" x2="100.76" y2="206" stroke="#000" stroke-opacity="0.390" stroke-width="1.65"/>
+    <line x1="105.49" y1="36" x2="105.49" y2="206" stroke="#fff" stroke-opacity="0.387" stroke-width="1.44"/>
+    <line x1="110.18" y1="36" x2="110.18" y2="206" stroke="#000" stroke-opacity="0.409" stroke-width="1.79"/>
+    <line x1="115.10" y1="36" x2="115.10" y2="206" stroke="#fff" stroke-opacity="0.398" stroke-width="1.49"/>
+    <line x1="119.98" y1="36" x2="119.98" y2="206" stroke="#000" stroke-opacity="0.419" stroke-width="1.87"/>
+    <line x1="124.90" y1="36" x2="124.90" y2="206" stroke="#fff" stroke-opacity="0.398" stroke-width="1.49"/>
+    <line x1="129.79" y1="36" x2="129.79" y2="206" stroke="#000" stroke-opacity="0.419" stroke-width="1.87"/>
+    <line x1="134.51" y1="36" x2="134.51" y2="206" stroke="#fff" stroke-opacity="0.387" stroke-width="1.44"/>
+    <line x1="139.21" y1="36" x2="139.21" y2="206" stroke="#000" stroke-opacity="0.409" stroke-width="1.79"/>
+    <line x1="143.57" y1="36" x2="143.57" y2="206" stroke="#fff" stroke-opacity="0.363" stroke-width="1.32"/>
+    <line x1="147.90" y1="36" x2="147.90" y2="206" stroke="#000" stroke-opacity="0.390" stroke-width="1.65"/>
+    <line x1="151.72" y1="36" x2="151.72" y2="206" stroke="#fff" stroke-opacity="0.329" stroke-width="1.16"/>
+    <line x1="155.51" y1="36" x2="155.51" y2="206" stroke="#000" stroke-opacity="0.363" stroke-width="1.45"/>
+    <line x1="158.65" y1="36" x2="158.65" y2="206" stroke="#fff" stroke-opacity="0.286" stroke-width="0.95"/>
+    <line x1="161.76" y1="36" x2="161.76" y2="206" stroke="#000" stroke-opacity="0.328" stroke-width="1.19"/>
+    <line x1="164.10" y1="36" x2="164.10" y2="206" stroke="#fff" stroke-opacity="0.235" stroke-width="0.71"/>
+    <line x1="166.41" y1="36" x2="166.41" y2="206" stroke="#000" stroke-opacity="0.287" stroke-width="0.88"/>
+    <line x1="167.85" y1="36" x2="167.85" y2="206" stroke="#fff" stroke-opacity="0.179" stroke-width="0.50"/>
+    <line x1="169.27" y1="36" x2="169.27" y2="206" stroke="#000" stroke-opacity="0.241" stroke-width="0.62"/>
+    <line x1="169.76" y1="36" x2="169.76" y2="206" stroke="#fff" stroke-opacity="0.119" stroke-width="0.50"/>
+    <line x1="170.24" y1="36" x2="170.24" y2="206" stroke="#000" stroke-opacity="0.193" stroke-width="0.62"/>
+  </g>
+  <path d="M70 50 L70 192 A50 14 0 0 0 170 192 L170 50 A50 14 0 0 0 70 50 Z" fill="url(#edge)"/>
 
-  <!-- base -->
-  <path d="M9 29 H31 L33 34 H7 Z" fill="url(#g)" opacity="0.25" stroke="url(#g)" stroke-width="1.3" stroke-linejoin="round"/>
-
-  <!-- glow + flame -->
-  <circle cx="20" cy="20.5" r="6" fill="url(#flame)"/>
-  <circle cx="20" cy="20.5" r="2.6" fill="#fbbf24"/>
+  <ellipse cx="120" cy="50" rx="50" ry="14" fill="url(#rim)"/>
+  <ellipse cx="120" cy="50" rx="45.5" ry="12" fill="url(#inner)"/>
+  <g clip-path="url(#innerClip)" opacity="0.7">
+    <line x1="74.72" y1="36" x2="74.72" y2="64" stroke="#fff" stroke-opacity="0.148" stroke-width="0.50"/>
+    <line x1="75.16" y1="36" x2="75.16" y2="64" stroke="#000" stroke-opacity="0.206" stroke-width="0.62"/>
+    <line x1="76.46" y1="36" x2="76.46" y2="64" stroke="#fff" stroke-opacity="0.223" stroke-width="0.50"/>
+    <line x1="77.76" y1="36" x2="77.76" y2="64" stroke="#000" stroke-opacity="0.258" stroke-width="0.62"/>
+    <line x1="79.87" y1="36" x2="79.87" y2="64" stroke="#fff" stroke-opacity="0.294" stroke-width="0.52"/>
+    <line x1="81.98" y1="36" x2="81.98" y2="64" stroke="#000" stroke-opacity="0.307" stroke-width="0.65"/>
+    <line x1="84.83" y1="36" x2="84.83" y2="64" stroke="#fff" stroke-opacity="0.357" stroke-width="0.70"/>
+    <line x1="87.66" y1="36" x2="87.66" y2="64" stroke="#000" stroke-opacity="0.351" stroke-width="0.87"/>
+    <line x1="91.14" y1="36" x2="91.14" y2="64" stroke="#fff" stroke-opacity="0.411" stroke-width="0.85"/>
+    <line x1="94.59" y1="36" x2="94.59" y2="64" stroke="#000" stroke-opacity="0.389" stroke-width="1.06"/>
+    <line x1="98.55" y1="36" x2="98.55" y2="64" stroke="#fff" stroke-opacity="0.454" stroke-width="0.97"/>
+    <line x1="102.49" y1="36" x2="102.49" y2="64" stroke="#000" stroke-opacity="0.418" stroke-width="1.21"/>
+    <line x1="106.79" y1="36" x2="106.79" y2="64" stroke="#fff" stroke-opacity="0.483" stroke-width="1.05"/>
+    <line x1="111.07" y1="36" x2="111.07" y2="64" stroke="#000" stroke-opacity="0.438" stroke-width="1.32"/>
+    <line x1="115.54" y1="36" x2="115.54" y2="64" stroke="#fff" stroke-opacity="0.498" stroke-width="1.09"/>
+    <line x1="119.99" y1="36" x2="119.99" y2="64" stroke="#000" stroke-opacity="0.449" stroke-width="1.37"/>
+    <line x1="124.46" y1="36" x2="124.46" y2="64" stroke="#fff" stroke-opacity="0.498" stroke-width="1.09"/>
+    <line x1="128.91" y1="36" x2="128.91" y2="64" stroke="#000" stroke-opacity="0.449" stroke-width="1.37"/>
+    <line x1="133.21" y1="36" x2="133.21" y2="64" stroke="#fff" stroke-opacity="0.483" stroke-width="1.05"/>
+    <line x1="137.48" y1="36" x2="137.48" y2="64" stroke="#000" stroke-opacity="0.438" stroke-width="1.32"/>
+    <line x1="141.45" y1="36" x2="141.45" y2="64" stroke="#fff" stroke-opacity="0.454" stroke-width="0.97"/>
+    <line x1="145.39" y1="36" x2="145.39" y2="64" stroke="#000" stroke-opacity="0.418" stroke-width="1.21"/>
+    <line x1="148.86" y1="36" x2="148.86" y2="64" stroke="#fff" stroke-opacity="0.411" stroke-width="0.85"/>
+    <line x1="152.32" y1="36" x2="152.32" y2="64" stroke="#000" stroke-opacity="0.389" stroke-width="1.06"/>
+    <line x1="155.17" y1="36" x2="155.17" y2="64" stroke="#fff" stroke-opacity="0.357" stroke-width="0.70"/>
+    <line x1="158.01" y1="36" x2="158.01" y2="64" stroke="#000" stroke-opacity="0.351" stroke-width="0.87"/>
+    <line x1="160.13" y1="36" x2="160.13" y2="64" stroke="#fff" stroke-opacity="0.294" stroke-width="0.52"/>
+    <line x1="162.23" y1="36" x2="162.23" y2="64" stroke="#000" stroke-opacity="0.307" stroke-width="0.65"/>
+    <line x1="163.54" y1="36" x2="163.54" y2="64" stroke="#fff" stroke-opacity="0.223" stroke-width="0.50"/>
+    <line x1="164.84" y1="36" x2="164.84" y2="64" stroke="#000" stroke-opacity="0.258" stroke-width="0.62"/>
+    <line x1="165.28" y1="36" x2="165.28" y2="64" stroke="#fff" stroke-opacity="0.148" stroke-width="0.50"/>
+    <line x1="165.72" y1="36" x2="165.72" y2="64" stroke="#000" stroke-opacity="0.206" stroke-width="0.62"/>
+  </g>
+  <path d="M70 50 A50 14 0 0 0 170 50" fill="none" stroke="#c3c9ff" stroke-opacity="0.9" stroke-width="1.5"/>
 </svg>
