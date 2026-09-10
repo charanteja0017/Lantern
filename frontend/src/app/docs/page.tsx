@@ -30,7 +30,7 @@ import { TryIt } from "./try-it";
 import { GROUPS, type Endpoint, type Group, type Method } from "./endpoints";
 
 const BASE_URL = `${config.apiHost}/v1`;
-const ENV_VAR = "NOVAHUNTER_API_KEY";
+const ENV_VAR = "LANTERN_API_KEY";
 
 /* ──────────────────────────────────────────────────────────────────────────
  * Page
@@ -218,7 +218,7 @@ export default function DocsPage() {
                     <span className="ml-auto font-mono">quick-start</span>
                   </div>
                   <pre className="overflow-x-auto font-mono text-[11px] leading-relaxed text-foreground/90 scrollbar-thin">
-                    <code>{`$ export ${ENV_VAR}=novahunter_live_sk_...
+                    <code>{`$ export ${ENV_VAR}=lantern_live_sk_...
 $ curl ${BASE_URL}/runs \\
     -H "Authorization: Bearer $${ENV_VAR}"
 {
@@ -266,7 +266,7 @@ $ curl ${BASE_URL}/runs \\
             </p>
             <CodeBlock
               language="http"
-              code={`Authorization: Bearer novahunter_live_sk_...`}
+              code={`Authorization: Bearer lantern_live_sk_...`}
             />
             <ul className="mt-4 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
               <li>Keys are scoped to a single workspace.</li>
@@ -288,30 +288,30 @@ $ curl ${BASE_URL}/runs \\
 
           <Section id="rate-limits" title="Rate limits" eyebrow="Introduction" icon={Zap}>
             <p>
-              Every workspace has a rolling-window request limit and a concurrent-run limit. Limits
-              apply across all keys in a workspace.
+              This is your own instance, so there are no plan tiers — the limits below are simply
+              whatever you set in <code>deploy/.env</code>. They exist to stop a runaway scan from
+              exhausting your LLM provider quota, not to sell you a bigger one. The defaults ship
+              conservative; raise them freely.
             </p>
             <div className="mt-5 overflow-x-auto rounded-lg border border-border">
               <table className="min-w-full text-sm">
                 <thead className="bg-surface-2/50 text-left text-xs uppercase tracking-wider text-muted-foreground">
                   <tr>
-                    <th className="px-4 py-2">Tier</th>
-                    <th className="px-4 py-2">Requests / min</th>
-                    <th className="px-4 py-2">Concurrent runs</th>
-                    <th className="px-4 py-2">Report downloads / day</th>
+                    <th className="px-4 py-2">Setting</th>
+                    <th className="px-4 py-2">Environment variable</th>
+                    <th className="px-4 py-2">Default</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
                   {[
-                    ["Free trial", "60", "1", "10"],
-                    ["Team", "600", "5", "500"],
-                    ["Enterprise", "Custom", "Custom", "Custom"],
+                    ["Requests / min", "STRIX_LLM_RPM_DEFAULT", "50"],
+                    ["Tokens / min", "STRIX_LLM_TPM_DEFAULT", "30000"],
+                    ["Concurrent agent calls", "STRIX_LLM_CONCURRENCY_DEFAULT", "4"],
                   ].map((r) => (
                     <tr key={r[0]}>
                       <td className="px-4 py-2 font-medium">{r[0]}</td>
                       <td className="px-4 py-2 font-mono text-sm">{r[1]}</td>
                       <td className="px-4 py-2 font-mono text-sm">{r[2]}</td>
-                      <td className="px-4 py-2 font-mono text-sm">{r[3]}</td>
                     </tr>
                   ))}
                 </tbody>

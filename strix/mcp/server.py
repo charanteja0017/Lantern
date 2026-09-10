@@ -21,15 +21,15 @@ def _stdio_loop() -> None:
         except Exception:
             print(json.dumps({"error": "invalid_json"}))
             continue
-        print(json.dumps({"id": req.get("id"), "result": {"server": "novahunter-mcp", "ok": True}}))
+        print(json.dumps({"id": req.get("id"), "result": {"server": "lantern-mcp", "ok": True}}))
 
 
 def _sse_events() -> Iterator[str]:
-    yield 'event: ready\ndata: {"server":"novahunter-mcp"}\n\n'
+    yield 'event: ready\ndata: {"server":"lantern-mcp"}\n\n'
 
 
 def build_app() -> FastAPI:
-    app = FastAPI(title="NovaHunter MCP")
+    app = FastAPI(title="Lantern MCP")
 
     @app.get("/mcp/sse")
     async def mcp_sse() -> StreamingResponse:

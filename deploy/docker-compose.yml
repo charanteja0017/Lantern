@@ -103,6 +103,9 @@ services:
       # from this image. Anything bundled in that image (nmap, caido, the
       # browser, etc.) becomes available to the agents running a scan — which
       # is the same toolset the terminal CLI gets from `scripts/install.sh`.
+      # Default points at the sandbox image that is already published and
+      # public. Once you have run .github/workflows/sandbox-image.yml under
+      # your own account, switch this to ghcr.io/<you>/lantern-sandbox:latest.
       STRIX_IMAGE: ${STRIX_IMAGE:-ghcr.io/maramharsha/novahunter-sandbox:latest}
       STRIX_RUNTIME_BACKEND: docker
       # Sandbox tool-server ports are published on the *host* loopback.
@@ -171,7 +174,7 @@ services:
       args:
         NEXT_PUBLIC_DEMO: ${NEXT_PUBLIC_DEMO:-false}
         NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-/api}
-        NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME:-NovaHunter}
+        NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME:-Lantern}
         # Clerk publishable key (pk_test_… / pk_live_…). Set in deploy/.env;
         # empty is allowed for dev builds when testing without auth UI.
         NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:-}
@@ -197,7 +200,7 @@ services:
     <<: *default-restart
     image: caddy:2-alpine
     ports:
-      - "${NOVA_HTTP_PORT:-80}:80"
+      - "${LANTERN_HTTP_PORT:-80}:80"
       - "443:443"
     environment:
       STRIX_DOMAIN: ${STRIX_DOMAIN:-localhost}

@@ -9,7 +9,7 @@ type Line =
   | { kind: "blank" };
 
 const SCRIPT: Line[] = [
-  { kind: "prompt", text: "novahunter run --target https://api.acme.com --mode standard" },
+  { kind: "prompt", text: "lantern run --target https://api.acme.com --mode standard" },
   { kind: "out", text: "✓ Workspace isolated (sandbox_id=sb_7f2a)", tone: "ok" },
   { kind: "out", text: "→ spawning HunterAgent(root) …", tone: "muted" },
   { kind: "blank" },
@@ -105,14 +105,14 @@ export function AttackTerminal() {
   }, [rendered, typing]);
 
   return (
-    <div className="relative rounded-xl border border-border bg-background/80 shadow-[0_20px_60px_-20px_hsl(var(--primary)/0.35)] backdrop-blur-lg">
+    <div className="terminal-surface relative overflow-hidden rounded-xl border border-border shadow-[0_20px_60px_-20px_hsl(var(--primary)/0.35)]">
       <div className="flex items-center gap-2 border-b border-border px-4 py-2.5">
         <span className="h-2.5 w-2.5 rounded-full bg-red-500/80" />
         <span className="h-2.5 w-2.5 rounded-full bg-amber-400/80" />
         <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/80" />
         <div className="ml-3 flex items-center gap-1.5 text-[11px] text-muted-foreground">
           <CircleDot className="h-3 w-3 text-emerald-400 animate-pulse-dot" />
-          <span className="font-mono">novahunter — live scan · run-aurora-01</span>
+          <span className="font-mono">lantern — live scan · run-aurora-01</span>
         </div>
         <div className="ml-auto hidden gap-2 text-[10px] font-mono text-muted-foreground md:flex">
           <span className="rounded border border-border px-1.5 py-0.5">sandbox</span>
@@ -151,7 +151,7 @@ export function AttackTerminal() {
             </div>
           )}
         </div>
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-background/80 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-[hsl(222_28%_9%)] to-transparent" />
       </div>
     </div>
   );

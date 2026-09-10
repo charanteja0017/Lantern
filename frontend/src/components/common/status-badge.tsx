@@ -1,9 +1,12 @@
 import { Badge } from "@/components/ui/badge";
 import type { RunStatus } from "@/lib/types";
 
-const MAP: Record<RunStatus, { label: string; variant: "success" | "warning" | "danger" | "info" | "primary" | "default" }> = {
+const MAP: Record<
+  RunStatus,
+  { label: string; variant: "success" | "warning" | "danger" | "info" | "live" | "default" }
+> = {
   queued: { label: "Queued", variant: "default" },
-  running: { label: "Running", variant: "primary" },
+  running: { label: "Running", variant: "live" },
   paused: { label: "Paused", variant: "warning" },
   throttled: { label: "Throttled", variant: "warning" },
   completed: { label: "Completed", variant: "success" },

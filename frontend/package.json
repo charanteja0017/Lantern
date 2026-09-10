@@ -1,5 +1,5 @@
 {
-  "name": "strix-dashboard",
+  "name": "lantern-dashboard",
   "version": "0.2.0",
   "private": true,
   "description": "Strix Web SaaS Dashboard - enterprise security testing control plane",
@@ -16,7 +16,6 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md,css}\""
   },
   "dependencies": {
-    "@clerk/nextjs": "^7.2.3",
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-dropdown-menu": "^2.1.16",

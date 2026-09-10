@@ -9,15 +9,12 @@ import {
   BookOpen,
   Bug,
   FileText,
-  KeyRound,
   LayoutDashboard,
   PlayCircle,
   Search,
   Settings,
   Shield,
   ShieldAlert,
-  User,
-  Users,
 } from "lucide-react";
 
 import {
@@ -49,10 +46,7 @@ const NAV_ITEMS: Item[] = [
   { id: "nav-notifications", label: "Notifications", href: "/notifications", icon: Bell, group: "Navigate" },
   { id: "nav-docs", label: "API docs", href: "/docs", icon: BookOpen, group: "Navigate", hint: "REST reference & examples" },
   { id: "nav-settings", label: "Workspace settings", href: "/settings", icon: Settings, group: "Navigate" },
-  { id: "nav-profile", label: "Your profile", href: "/profile", icon: User, group: "Navigate" },
-  { id: "nav-api-keys", label: "API keys", href: "/profile?tab=keys", icon: KeyRound, group: "Navigate" },
   { id: "nav-admin", label: "Admin home", href: "/admin", icon: ShieldAlert, group: "Navigate" },
-  { id: "nav-admin-orgs", label: "Admin · Organizations", href: "/admin/organizations", icon: Users, group: "Navigate" },
   { id: "nav-admin-rl", label: "Admin · Rate limits", href: "/admin/rate-limits", icon: Activity, group: "Navigate" },
   { id: "nav-admin-audit", label: "Admin · Audit log", href: "/admin/audit", icon: Shield, group: "Navigate" },
 ];

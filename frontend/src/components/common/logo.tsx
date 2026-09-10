@@ -6,8 +6,8 @@ export function StrixLogo({ className, size = 28 }: { className?: string; size?:
       <svg width={size} height={size} viewBox="0 0 40 40" fill="none" aria-hidden>
         <defs>
           <linearGradient id="strix-g" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="hsl(190 95% 60%)" />
-            <stop offset="100%" stopColor="hsl(230 95% 60%)" />
+            <stop offset="0%" stopColor="hsl(var(--primary))" />
+            <stop offset="100%" stopColor="hsl(var(--live))" />
           </linearGradient>
         </defs>
         <path

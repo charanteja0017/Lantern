@@ -38,7 +38,7 @@ export function ShellTabs({ runId }: ShellTabsProps) {
     if (hostRef.current) {
       term.open(hostRef.current);
       fit.fit();
-      term.writeln("NovaHunter terminal attached.");
+      term.writeln("Lantern terminal attached.");
     }
     termRef.current = term;
     fitRef.current = fit;

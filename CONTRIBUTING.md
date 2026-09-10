@@ -1,6 +1,12 @@
-# Contributing to Strix
+# Contributing to Lantern
 
-Thank you for your interest in contributing to Strix! This guide will help you get started with development and contributions.
+Thank you for your interest in contributing to Lantern! This guide will help you get started with development and contributions.
+
+Lantern is a fork of [Strix](https://github.com/usestrix/strix) — this
+guide covers developing Lantern itself (the dashboard, API, deploy stack,
+and installer). If your contribution is really about the underlying Strix
+agent (the CLI, the hacker toolkit, the LLM adapters), consider sending it
+upstream instead, where it benefits everyone building on Strix.
 
 ## 🚀 Development Setup
 
@@ -15,8 +21,8 @@ Thank you for your interest in contributing to Strix! This guide will help you g
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/usestrix/strix.git
-   cd strix
+   git clone https://github.com/charanteja0017/Lantern.git
+   cd Lantern
    ```
 
 2. **Install development dependencies**
@@ -80,10 +86,15 @@ Skills are specialized knowledge packages that enhance agent capabilities. See [
 
 ## 🐛 Reporting Issues
 
+File Lantern-specific bugs (dashboard, API, installer, Ubuntu deploy)
+against [this repo](https://github.com/charanteja0017/Lantern/issues).
+Bugs in the underlying Strix agent belong on the
+[upstream tracker](https://github.com/usestrix/strix/issues) instead.
+
 When reporting bugs, please include:
 
 - Python version and OS
-- Strix version
+- Lantern / Strix version
 - LLMs being used
 - Full error traceback
 - Steps to reproduce
@@ -101,16 +112,14 @@ We welcome feature ideas! Please:
 
 ## 🤝 Community
 
-- **Discord**: [Join our community](https://discord.gg/strix-ai)
-- **Issues**: [GitHub Issues](https://github.com/usestrix/strix/issues)
+- **Lantern issues**: [GitHub Issues](https://github.com/charanteja0017/Lantern/issues)
+- **Strix Discord**: [Join the community](https://discord.gg/strix-ai)
 
 ## ✨ Recognition
 
-We value all contributions! Contributors will be:
-- Listed in release notes
-- Thanked in our Discord
-- Added to contributors list (coming soon)
+We value all contributions! Contributors will be listed in release notes
+and thanked for their work.
 
 ---
 
-**Questions?** Reach out on [Discord](https://discord.gg/strix-ai) or create an issue. We're here to help!
+**Questions?** Open an [issue](https://github.com/charanteja0017/Lantern/issues) — we're here to help.

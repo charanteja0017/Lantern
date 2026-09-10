@@ -47,6 +47,10 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        live: {
+          DEFAULT: "hsl(var(--live))",
+          foreground: "hsl(var(--live-foreground))",
+        },
         severity: {
           critical: "hsl(var(--sev-critical))",
           high: "hsl(var(--sev-high))",
@@ -66,7 +70,7 @@ const config: Config = {
       },
       boxShadow: {
         glow: "0 0 0 1px hsl(var(--primary) / 0.25), 0 8px 24px -6px hsl(var(--primary) / 0.35)",
-        card: "0 1px 0 hsl(var(--border)), 0 8px 24px -8px hsl(0 0% 0% / 0.25)",
+        card: "0 1px 2px hsl(220 40% 20% / 0.06), 0 8px 24px -12px hsl(220 40% 20% / 0.10)",
       },
       keyframes: {
         "accordion-down": {

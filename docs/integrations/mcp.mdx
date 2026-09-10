@@ -1,8 +1,8 @@
 # MCP Integration
 
-NovaHunter supports both MCP server and MCP client modes.
+Lantern supports both MCP server and MCP client modes.
 
-## NovaHunter as MCP Server
+## Lantern as MCP Server
 
 - Transport: `stdio` (default) and `HTTP+SSE`.
 - Entry point: `python -m strix.mcp.server --transport stdio`
@@ -14,7 +14,7 @@ NovaHunter supports both MCP server and MCP client modes.
 ```json
 {
   "mcpServers": {
-    "novahunter": {
+    "lantern": {
       "command": "python",
       "args": ["-m", "strix.mcp.server", "--transport", "stdio"]
     }
@@ -26,7 +26,7 @@ NovaHunter supports both MCP server and MCP client modes.
 
 ```json
 {
-  "name": "novahunter",
+  "name": "lantern",
   "transport": "http+sse",
   "url": "https://your-host/api/mcp/sse",
   "headers": {
@@ -35,7 +35,7 @@ NovaHunter supports both MCP server and MCP client modes.
 }
 ```
 
-## NovaHunter as MCP Client
+## Lantern as MCP Client
 
 - Curated gallery endpoint: `/api/mcp/gallery`
 - Custom MCP endpoint: `/api/mcp/custom`

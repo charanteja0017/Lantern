@@ -1,4 +1,4 @@
-# NovaHunter Change Log
+# Lantern Change Log
 
 This document summarizes all implementation work completed in this execution cycle to close Pentest-Copilot parity gaps.
 

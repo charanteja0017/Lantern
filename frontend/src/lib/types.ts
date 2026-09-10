@@ -297,7 +297,7 @@ export interface SystemHealthSnapshot {
 
 // Server-side view of the authenticated caller. The backend computes role
 // (and possibly elevates to ``platform-admin`` via STRIX_ADMIN_EMAILS /
-// STRIX_ADMIN_USER_IDS), so prefer this over Clerk's raw org_role for any
+// STRIX_ADMIN_USER_IDS), so prefer this over any raw role claim for
 // authorization-adjacent UI like the profile badge.
 export interface WhoAmI {
   userId: string;

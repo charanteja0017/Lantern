@@ -285,7 +285,7 @@ async def export_report(
         "ETag": etag,
         "Cache-Control": "private, max-age=0, must-revalidate",
         "Content-Disposition": f'attachment; filename="{result.filename}"',
-        "X-NovaHunter-Report-Format": fmt_norm,
+        "X-Lantern-Report-Format": fmt_norm,
     }
     if fmt_norm == "pdf" and not result.content.startswith(b"%PDF"):
         # weasyprint unavailable stub; surface 501 so the client can fall back.

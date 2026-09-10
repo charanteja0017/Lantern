@@ -1,6 +1,6 @@
 # Canonical Finding Report Template (HackerOne / Bugcrowd / OpenBugBounty aligned)
 
-This template is the shape every NovaHunter report aims to match. It is
+This template is the shape every Lantern report aims to match. It is
 inspired by the structure used by top-tier disclosures on HackerOne,
 Bugcrowd, and OpenBugBounty. Every field below maps 1:1 to a field on
 `FindingReport` in `strix/api/services/report_schema.py` - if the LLM fills

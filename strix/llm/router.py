@@ -247,8 +247,8 @@ class ModelRouter:
         if isinstance(patched["metadata"], dict):
             patched["metadata"] = {
                 **patched["metadata"],
-                "novahunter_role": role,
-                "novahunter_model": spec.model,
+                "lantern_role": role,
+                "lantern_model": spec.model,
             }
         return patched
 

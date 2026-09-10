@@ -170,7 +170,7 @@ export class DemoProvider implements StrixProvider {
     return {
       terminal_id: shellId,
       command: input,
-      content: `demo@novahunter:$ ${input}\n(simulated output)`,
+      content: `demo@lantern:$ ${input}\n(simulated output)`,
       status: "completed",
       exit_code: 0,
       working_dir: "/workspace",
@@ -180,7 +180,7 @@ export class DemoProvider implements StrixProvider {
     await delay(30);
     return {
       terminal_id: shellId,
-      content: "demo@novahunter:$ ",
+      content: "demo@lantern:$ ",
       status: "completed",
       exit_code: 0,
       working_dir: "/workspace",

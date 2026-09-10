@@ -22,7 +22,6 @@ import type {
   SystemHealthSnapshot,
   WhoAmI,
 } from "@/lib/types";
-import { getAuthToken } from "./auth-token";
 
 /**
  * Real backend provider. Wraps the Strix FastAPI backend.
@@ -60,9 +59,11 @@ export class ApiProvider implements StrixProvider {
     return `${base}${suffix}`;
   }
 
+  // No session tokens: this build has no account system. Cookie credentials
+  // are still sent, so a reverse proxy in front of the API can add its own
+  // auth without the app needing to know about it.
   private async authHeaders(): Promise<Record<string, string>> {
-    const token = await getAuthToken();
-    return token ? { authorization: `Bearer ${token}` } : {};
+    return {};
   }
 
   private async fetchJson<T>(path: string, init?: RequestInit): Promise<T> {

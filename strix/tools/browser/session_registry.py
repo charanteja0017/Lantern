@@ -16,7 +16,7 @@ instance. It does not own pages or contexts; it only tracks metadata about
 which logical session an agent belongs to. The tab manager continues to
 own resource lifetimes.
 
-The mapping mirrors NovaHunter's ``PLAYWRIGHT_SESSION_MAPPING``: each
+The mapping mirrors Lantern's ``PLAYWRIGHT_SESSION_MAPPING``: each
 vuln/exploit pair shares a single session, pre-recon/recon each own their
 own, and the report agent reuses a prior session instead of spawning a new
 one.
@@ -40,7 +40,7 @@ logger = logging.getLogger(__name__)
 # --- Session naming ----------------------------------------------------------
 
 # Phase -> stable session id. The vuln/exploit pairs share an id to match
-# NovaHunter's behavior: the exploit agent reuses the browser state the vuln
+# Lantern's behavior: the exploit agent reuses the browser state the vuln
 # agent established. Reporting re-uses session 3 (auth) because it commonly
 # needs an authenticated view.
 PHASE_SESSION_MAPPING: dict[str, str] = {

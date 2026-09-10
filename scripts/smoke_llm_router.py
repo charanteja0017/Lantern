@@ -118,8 +118,8 @@ def main() -> int:
     assert args["model"] == "openai/gpt-4.1-mini"
     assert args["api_key"] == "sk-openai-exec"
     assert args["max_tokens"] == 4096
-    assert args["metadata"]["novahunter_role"] == "executor"
-    assert args["metadata"]["novahunter_model"] == "openai/gpt-4.1-mini"
+    assert args["metadata"]["lantern_role"] == "executor"
+    assert args["metadata"]["lantern_model"] == "openai/gpt-4.1-mini"
     # Caller-provided metadata is preserved.
     args2 = router.prepare_completion_args(
         "reporter",
@@ -131,7 +131,7 @@ def main() -> int:
     )
     assert args2["model"] == "anthropic/claude-opus-4"
     assert args2["metadata"]["trace_id"] == "abc"
-    assert args2["metadata"]["novahunter_role"] == "reporter"
+    assert args2["metadata"]["lantern_role"] == "reporter"
 
     # 8) clear_run drops the run-scope override.
     router.clear_run("run-42")

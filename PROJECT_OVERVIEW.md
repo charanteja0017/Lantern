@@ -1,13 +1,13 @@
-# NovaHunter — Project Overview (Deep Dive)
+# Lantern — Project Overview (Deep Dive)
 
-NovaHunter is a **self-hosted, AI-driven offensive-security control plane**. It combines:
+Lantern is a **self-hosted, AI-driven offensive-security control plane**. It combines:
 
 - A **Next.js dashboard** (`frontend/`) for operators (runs, findings, reports, analytics, admin).
 - A **FastAPI backend** (`strix/api/`) exposing REST + SSE/websocket-style streaming APIs and orchestration.
 - The **Strix agent runtime** (`strix/`) that actually performs scans by spawning a sandboxed tool environment.
 - A production-ish **Docker Compose deployment** (`deploy/`) fronted by **Caddy** (single public port).
 
-NovaHunter is a fork of the open-source Strix project and keeps the original Strix CLI intact, while adding a full web control plane and deployment stack.
+Lantern is a fork of the open-source Strix project and keeps the original Strix CLI intact, while adding a full web control plane and deployment stack.
 
 > **Ethics / legality**: this is an offensive-security platform. Only test systems you own or have explicit permission to test.
 
@@ -74,7 +74,7 @@ Routing contract in Caddy (`deploy/Caddyfile`), summarized:
 
 ### Core data model: files as truth, DB as index
 
-NovaHunter uses a **file-backed source-of-truth** for each scan “run”. The Strix tracer writes run artifacts to:
+Lantern uses a **file-backed source-of-truth** for each scan “run”. The Strix tracer writes run artifacts to:
 
 - `STRIX_RUNS_DIR/<run_id>/events.jsonl` (**append-only truth source**)
 - `STRIX_RUNS_DIR/<run_id>/penetration_test_report.md`
@@ -83,7 +83,7 @@ NovaHunter uses a **file-backed source-of-truth** for each scan “run”. The S
 
 The FastAPI backend reads these artifacts to materialize API responses (see `strix/api/services/run_store.py`).
 
-When Postgres is enabled, NovaHunter additionally creates and maintains tables that function as:
+When Postgres is enabled, Lantern additionally creates and maintains tables that function as:
 
 - **Index / metadata store**: orgs/users/runs/findings index, audit log
 - **Operator config store**: LLM role routes, encrypted secrets, integrations, schedules, MCP registry/tokens
@@ -161,7 +161,7 @@ Anchors:
 
 ### Sidechannels (VNC / shell / Burp / VPN / listeners)
 
-NovaHunter exposes “operator cockpit” features (live browser, terminals, Burp panel, etc.) via **run-scoped sidechannels**.
+Lantern exposes “operator cockpit” features (live browser, terminals, Burp panel, etc.) via **run-scoped sidechannels**.
 
 How it works:
 
@@ -181,7 +181,7 @@ Anchors:
 
 ### Nova “swarm blackboard” (pgvector)
 
-NovaHunter adds a run-scoped **blackboard** (“shared findings”) that agents can write to and read from during a run.
+Lantern adds a run-scoped **blackboard** (“shared findings”) that agents can write to and read from during a run.
 
 Storage and scoring:
 
@@ -207,7 +207,7 @@ Anchors:
 
 ### LLM configuration + role routing
 
-NovaHunter treats LLM configuration as **server-authoritative**, because scans are launched by the backend and executed by the Strix subprocess.
+Lantern treats LLM configuration as **server-authoritative**, because scans are launched by the backend and executed by the Strix subprocess.
 
 Two layers:
 
@@ -261,7 +261,7 @@ Top-level map (most relevant directories):
 - `frontend/`: Next.js 16 dashboard (React 19.x), demo mode + live API provider.
 - `strix/`: Strix agent runtime + tools + LLM wrapper + telemetry.
   - `strix/api/`: FastAPI backend + services + schema + routes.
-  - `strix/nova/`: NovaHunter additions (e.g. blackboard).
+  - `strix/nova/`: Lantern additions (e.g. blackboard).
 - `deploy/`: docker compose stack, Caddy reverse proxy config, `.env.example`.
 - `scripts/`: installer (`setup.sh`) and helpers.
 - `docs/`: install/ops docs and reporting templates.
