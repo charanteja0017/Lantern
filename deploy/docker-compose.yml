@@ -103,6 +103,9 @@ services:
       # from this image. Anything bundled in that image (nmap, caido, the
       # browser, etc.) becomes available to the agents running a scan — which
       # is the same toolset the terminal CLI gets from `scripts/install.sh`.
+      # Default points at the sandbox image that is already published and
+      # public. Once you have run .github/workflows/sandbox-image.yml under
+      # your own account, switch this to ghcr.io/<you>/lantern-sandbox:latest.
       STRIX_IMAGE: ${STRIX_IMAGE:-ghcr.io/maramharsha/novahunter-sandbox:latest}
       STRIX_RUNTIME_BACKEND: docker
       # Sandbox tool-server ports are published on the *host* loopback.

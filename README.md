@@ -31,7 +31,7 @@ the API, Postgres, Redis and the reverse proxy — wired together and ready to
 scan. There is nothing to sign up for and no external service to point at.
 
 ```bash
-git clone https://github.com/charanteja0017/NovaHunter.git
+git clone https://github.com/charanteja0017/Lantern.git
 cd Lantern/deploy
 cp .env.example .env
 docker compose --env-file .env up -d --build
@@ -222,7 +222,7 @@ clone** of this repository (it does not `git clone` for you — it needs
 2. Install Git if you do not have it: `sudo apt update && sudo apt install -y git`
 3. Clone and enter the repo:
    ```bash
-   git clone https://github.com/charanteja0017/NovaHunter.git
+   git clone https://github.com/charanteja0017/Lantern.git
    cd Lantern
    ```
 4. Run the installer **as root** (it will call `docker` and write under `deploy/`):
@@ -242,7 +242,7 @@ clone** of this repository (it does not `git clone` for you — it needs
 **One line** (clone + install), if Git is already installed:
 
 ```bash
-git clone https://github.com/charanteja0017/NovaHunter.git && cd Lantern && sudo bash scripts/setup.sh
+git clone https://github.com/charanteja0017/Lantern.git && cd Lantern && sudo bash scripts/setup.sh
 ```
 
 What happens in ~5 minutes:
@@ -658,8 +658,8 @@ the same way — Lantern extends the project, it does not replace it.
 endpoints, deploy hardening, and tests are all in scope—open an issue first
 for larger changes so we can align on direction.
 
-Please open [issues](https://github.com/charanteja0017/NovaHunter/issues) for
-bugs or ideas, or submit a [pull request](https://github.com/charanteja0017/NovaHunter/pulls)
+Please open [issues](https://github.com/charanteja0017/Lantern/issues) for
+bugs or ideas, or submit a [pull request](https://github.com/charanteja0017/Lantern/pulls)
 with a short description of the change and how you tested it. For local dev
 setup (Python, Docker, `uv`, pre-commit), see [CONTRIBUTING.md](CONTRIBUTING.md).
 
@@ -670,7 +670,7 @@ setup (Python, Docker, `uv`, pre-commit), see [CONTRIBUTING.md](CONTRIBUTING.md)
 For Lantern-specific issues (dashboard, API, installer, Ubuntu deploy)
 file them against this fork:
 
-- https://github.com/charanteja0017/NovaHunter/issues
+- https://github.com/charanteja0017/Lantern/issues
 
 For questions about the Strix agent itself, the LLM providers, the hacker
 toolkit, or the CLI, please use the upstream resources:

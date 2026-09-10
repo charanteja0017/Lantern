@@ -44,7 +44,7 @@ private repos and deploy keys), then run the installer from inside the
 checkout:
 
 ```bash
-git clone https://github.com/charanteja0017/NovaHunter.git
+git clone https://github.com/charanteja0017/Lantern.git
 cd Lantern
 sudo bash scripts/setup.sh
 ```
@@ -313,7 +313,7 @@ sudo docker compose down -v
 cd ..
 # Optionally re-clone into a fresh directory if you want a clean tree:
 #   rm -rf /path/to/Lantern
-#   git clone https://github.com/charanteja0017/NovaHunter.git
+#   git clone https://github.com/charanteja0017/Lantern.git
 sudo bash scripts/setup.sh
 ```
 

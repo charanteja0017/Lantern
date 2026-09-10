@@ -18,7 +18,7 @@ Clone the repo onto the host yourself (the installer no longer does this —
 so private repos work without baking credentials into the pipeline), then:
 
 ```bash
-git clone https://github.com/charanteja0017/NovaHunter.git
+git clone https://github.com/charanteja0017/Lantern.git
 cd Lantern
 sudo bash scripts/setup.sh
 ```
@@ -76,7 +76,7 @@ sudo bash scripts/setup.sh             # apply
 ## Manual alternative
 
 ```bash
-git clone https://github.com/charanteja0017/NovaHunter.git
+git clone https://github.com/charanteja0017/Lantern.git
 cd Lantern/deploy
 cp .env.example .env
 # edit .env only if you want to customise Postgres credentials

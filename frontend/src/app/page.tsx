@@ -126,7 +126,7 @@ export default function LandingPage() {
         </nav>
         <div className="flex items-center gap-2">
           <a
-            href="https://github.com/charanteja0017/NovaHunter"
+            href="https://github.com/charanteja0017/Lantern"
             className="hidden sm:inline-flex"
           >
             <Button variant="ghost" size="sm">GitHub</Button>
@@ -168,7 +168,7 @@ export default function LandingPage() {
             </Link>
           </div>
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <CopyCommand command="git clone https://github.com/charanteja0017/NovaHunter.git && cd NovaHunter/deploy && docker compose up -d" />
+            <CopyCommand command="git clone https://github.com/charanteja0017/Lantern.git && cd Lantern/deploy && docker compose up -d" />
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
               One command. Sandbox-isolated. Deploys anywhere.
@@ -412,7 +412,7 @@ export default function LandingPage() {
                 </Link>
               </div>
               <div className="mt-6 flex items-center justify-center">
-                <CopyCommand command="git clone https://github.com/charanteja0017/NovaHunter.git && cd NovaHunter/deploy && docker compose up -d" />
+                <CopyCommand command="git clone https://github.com/charanteja0017/Lantern.git && cd Lantern/deploy && docker compose up -d" />
               </div>
             </div>
           </div>
@@ -431,7 +431,7 @@ export default function LandingPage() {
             <div className="flex items-center gap-4">
               <Link href="/dashboard" className="hover:text-foreground">Dashboard</Link>
               <Link href="/docs" className="hover:text-foreground">API</Link>
-              <a href="https://github.com/charanteja0017/NovaHunter/issues" className="hover:text-foreground">
+              <a href="https://github.com/charanteja0017/Lantern/issues" className="hover:text-foreground">
                 Contact
               </a>
             </div>

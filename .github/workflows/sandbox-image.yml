@@ -1,4 +1,4 @@
-# Build and push: ghcr.io/<lowercase-owner>/novahunter-sandbox
+# Build and push: ghcr.io/<lowercase-owner>/lantern-sandbox
 #
 # Image tags: :<sha>, :latest, and :vX.Y.Z when triggered by a matching git tag.
 #
@@ -75,7 +75,7 @@ jobs:
         id: meta
         run: |
           OWNER="${{ steps.ghcr.outputs.owner }}"
-          REG="ghcr.io/${OWNER}/novahunter-sandbox"
+          REG="ghcr.io/${OWNER}/lantern-sandbox"
           SHA="${{ github.sha }}"
           LINES="${REG}:${SHA}"$'\n'"${REG}:latest"
           if [ "${{ github.ref_type }}" = "tag" ]; then

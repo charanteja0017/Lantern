@@ -454,7 +454,7 @@ STRIX_MASTER_KEY=${master_key}
 # container decides whether to use Burp or Caido per-task. Override this
 # variable to pin a custom build:
 #
-#    STRIX_IMAGE=ghcr.io/you/novahunter-sandbox:tag sudo bash scripts/setup.sh
+#    STRIX_IMAGE=ghcr.io/you/lantern-sandbox:tag sudo bash scripts/setup.sh
 STRIX_IMAGE=ghcr.io/maramharsha/novahunter-sandbox:latest
 EOF
     $SUDO chmod 600 "$env_file"
