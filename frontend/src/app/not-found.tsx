@@ -39,7 +39,7 @@ export default function NotFound() {
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute bottom-[22%] left-[22%] h-1 w-1 rounded-full bg-cyan-300 shadow-[0_0_14px_4px_hsl(190_95%_70%/0.5)] motion-safe:animate-[float_7s_ease-in-out_infinite_-1s]"
+        className="pointer-events-none absolute bottom-[22%] left-[22%] h-1 w-1 rounded-full bg-live shadow-[0_0_14px_4px_hsl(var(--live)/0.5)] motion-safe:animate-[float_7s_ease-in-out_infinite_-1s]"
       />
       <div
         aria-hidden
@@ -69,7 +69,7 @@ export default function NotFound() {
             className="pointer-events-none absolute inset-0 select-none bg-clip-text font-mono text-[10rem] font-extrabold leading-none tracking-tighter text-transparent sm:text-[14rem] motion-safe:animate-[glitch-a_4s_steps(12,end)_infinite]"
             style={{
               backgroundImage:
-                "linear-gradient(hsl(190 95% 55%), hsl(190 95% 55%))",
+                "linear-gradient(hsl(var(--primary)), hsl(var(--primary)))",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               mixBlendMode: "screen",

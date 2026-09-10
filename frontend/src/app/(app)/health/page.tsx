@@ -68,7 +68,7 @@ const SERVICE_LABELS: Record<string, string> = {
   redis: "Redis",
   runs_dir: "Runs filesystem",
   docker_socket: "Docker socket",
-  clerk: "Clerk (auth)",
+  clerk: "Auth (unused)",
   frontend: "Frontend (Next.js)",
 };
 
@@ -119,7 +119,7 @@ export default function HealthPage() {
     <>
       <PageHeader
         title="Health"
-        description="Live status of every moving part: API, Postgres, Redis, filesystem, Clerk, LLM governor, and the Next.js frontend."
+        description="Live status of every moving part: API, Postgres, Redis, filesystem, LLM governor, and the Next.js frontend."
         actions={
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex items-center gap-1 rounded-md border border-border bg-surface/40 p-1 text-xs">
@@ -690,13 +690,14 @@ function AuthCard({ snap }: { snap: SystemHealthSnapshot }) {
           <ShieldCheck className="h-4 w-4" /> Authentication
         </CardTitle>
         <CardDescription>
-          Clerk verification state, admin allowlist size, API key registry.
+          Reported by the API. This build ships without accounts, so these are
+          normally inactive.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <dl className="grid grid-cols-1 gap-x-6 gap-y-2 text-xs md:grid-cols-2">
           <Kv
-            k="Clerk"
+            k="Auth provider"
             v={
               <Badge variant={snap.auth.enabled ? "success" : "warning"}>
                 {snap.auth.enabled ? "enabled" : "disabled"}

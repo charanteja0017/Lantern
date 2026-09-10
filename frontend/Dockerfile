@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.7
-# Multi-stage Dockerfile for the Strix/NovaHunter Next.js 16 dashboard.
+# Multi-stage Dockerfile for the Strix/Lantern Next.js 16 dashboard.
 # Produces a small self-contained runtime image based on the Next.js
 # `standalone` output. Node 22 LTS is used to satisfy the Next 16 runtime
 # requirement (>= 20.9) with room for future upgrades.
@@ -26,7 +26,7 @@ COPY . .
 ARG NEXT_PUBLIC_DEMO=false
 ARG NEXT_PUBLIC_API_BASE_URL=/api
 ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
-ARG NEXT_PUBLIC_APP_NAME=NovaHunter
+ARG NEXT_PUBLIC_APP_NAME=Lantern
 ENV NEXT_PUBLIC_DEMO=$NEXT_PUBLIC_DEMO \
     NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL \
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY \

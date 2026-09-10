@@ -104,7 +104,7 @@ function AuthorizeDialogContent({ onDone }: { onDone: () => void }) {
           </div>
           The key is sent only when you click <kbd className="rounded bg-surface px-1 py-0.5 font-mono text-[10px]">Send</kbd>.
           It is stored in <code className="rounded bg-surface px-1 py-0.5 font-mono text-[10px]">localStorage</code>{" "}
-          and never transmitted to NovaHunter servers.
+          and never transmitted to Lantern servers.
         </div>
 
         <div className="space-y-2">
@@ -113,7 +113,7 @@ function AuthorizeDialogContent({ onDone }: { onDone: () => void }) {
             <Input
               id="docs-api-key"
               type={showKey ? "text" : "password"}
-              placeholder="novahunter_live_sk_..."
+              placeholder="lantern_live_sk_..."
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
               className="pr-10 font-mono text-sm"
@@ -144,7 +144,7 @@ function AuthorizeDialogContent({ onDone }: { onDone: () => void }) {
             id="docs-base-url"
             value={baseUrl}
             onChange={(e) => setBaseUrl(e.target.value)}
-            placeholder="https://api.novahunter.ai/v1"
+            placeholder="http://localhost/api/v1"
             className="font-mono text-sm"
             spellCheck={false}
           />

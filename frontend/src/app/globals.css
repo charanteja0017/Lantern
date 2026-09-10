@@ -7,66 +7,139 @@
     --font-sans: "Inter", system-ui, sans-serif;
     --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
-    --background: 222 47% 4%;
-    --foreground: 210 40% 98%;
-    --surface: 222 47% 7%;
-    --surface-2: 222 47% 10%;
+    /* ------------------------------------------------------------------
+     * Daylight
+     *
+     * Light is the DEFAULT here: white cards on a soft blue-grey ground,
+     * with a vivid indigo accent.
+     *
+     * The constraint that shapes every value below is that colour in this
+     * product is semantic. Severity owns red -> orange -> amber -> blue and
+     * run state owns green/amber/red, so the brand accent has to live
+     * outside both. Indigo does, at full brightness, which is why it can be
+     * this saturated without ever reading as an alert.
+     *
+     * Severity values are DARKER here than their dark-theme counterparts:
+     * a colour that pops against near-black washes out against white, so
+     * each one is re-tuned to clear 4.5:1 on the light ground rather than
+     * being reused across themes.
+     * ------------------------------------------------------------------ */
+    --background: 216 45% 98%;
+    --foreground: 221 39% 11%;
+    --surface: 216 40% 96%;
+    --surface-2: 216 33% 92%;
 
-    --card: 222 47% 7%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222 47% 8%;
-    --popover-foreground: 210 40% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 221 39% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 221 39% 11%;
 
-    --primary: 190 95% 55%;
-    --primary-foreground: 222 47% 8%;
+    --primary: 243 75% 59%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 222 32% 16%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 216 33% 93%;
+    --secondary-foreground: 221 39% 11%;
 
-    --muted: 222 32% 14%;
-    --muted-foreground: 215 20% 70%;
+    --muted: 216 33% 94%;
+    --muted-foreground: 215 16% 44%;
 
-    --accent: 190 95% 55%;
-    --accent-foreground: 222 47% 8%;
+    --accent: 243 75% 59%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 354 68% 50%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 222 32% 16%;
-    --input: 222 32% 14%;
-    --ring: 190 95% 55%;
+    --border: 217 31% 90%;
+    --input: 217 31% 90%;
+    --ring: 243 75% 59%;
 
-    --sev-critical: 0 84% 60%;
-    --sev-high: 22 92% 58%;
-    --sev-medium: 45 96% 58%;
-    --sev-low: 199 95% 60%;
-    --sev-info: 215 20% 70%;
+    /* Reserved for "happening right now" — never the brand accent. */
+    --live: 161 94% 27%;
+    --live-foreground: 0 0% 100%;
+
+    --sev-critical: 354 68% 50%;
+    --sev-high: 17 88% 40%;
+    --sev-medium: 35 92% 33%;
+    --sev-low: 224 76% 48%;
+    --sev-info: 215 16% 44%;
   }
 
+  /* next-themes writes the theme name as a class, so an explicit "light"
+     selection needs to resolve to the same values as the bare default. */
   .light {
-    --background: 210 40% 99%;
-    --foreground: 222 47% 11%;
-    --surface: 210 40% 97%;
-    --surface-2: 210 40% 94%;
+    --background: 216 45% 98%;
+    --foreground: 221 39% 11%;
+    --surface: 216 40% 96%;
+    --surface-2: 216 33% 92%;
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 221 39% 11%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
-    --primary: 190 95% 40%;
-    --primary-foreground: 210 40% 99%;
-    --secondary: 210 40% 94%;
-    --secondary-foreground: 222 47% 11%;
-    --muted: 210 40% 94%;
-    --muted-foreground: 215 16% 40%;
-    --accent: 190 95% 40%;
-    --accent-foreground: 210 40% 99%;
-    --destructive: 0 84% 50%;
-    --destructive-foreground: 210 40% 99%;
-    --border: 214 32% 88%;
-    --input: 214 32% 88%;
-    --ring: 190 95% 40%;
+    --popover-foreground: 221 39% 11%;
+    --primary: 243 75% 59%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 216 33% 93%;
+    --secondary-foreground: 221 39% 11%;
+    --muted: 216 33% 94%;
+    --muted-foreground: 215 16% 44%;
+    --accent: 243 75% 59%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 354 68% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 217 31% 90%;
+    --input: 217 31% 90%;
+    --ring: 243 75% 59%;
+    --live: 161 94% 27%;
+    --live-foreground: 0 0% 100%;
+    --sev-critical: 354 68% 50%;
+    --sev-high: 17 88% 40%;
+    --sev-medium: 35 92% 33%;
+    --sev-low: 224 76% 48%;
+    --sev-info: 215 16% 44%;
+  }
+
+  /* The dark theme is now the alternate, and it is deliberately lifted off
+     near-black so panels separate without heavy borders. Indigo lightens
+     here because the light-mode value would sink into the ground. */
+  .dark {
+    --background: 222 24% 10%;
+    --foreground: 216 30% 96%;
+    --surface: 222 22% 13%;
+    --surface-2: 222 20% 18%;
+
+    --card: 222 22% 13%;
+    --card-foreground: 216 30% 96%;
+    --popover: 222 24% 14%;
+    --popover-foreground: 216 30% 96%;
+
+    --primary: 243 90% 74%;
+    --primary-foreground: 222 40% 12%;
+
+    --secondary: 222 18% 20%;
+    --secondary-foreground: 216 30% 96%;
+
+    --muted: 222 18% 20%;
+    --muted-foreground: 217 15% 70%;
+
+    --accent: 243 90% 74%;
+    --accent-foreground: 222 40% 12%;
+
+    --destructive: 354 85% 66%;
+    --destructive-foreground: 216 30% 98%;
+
+    --border: 222 18% 24%;
+    --input: 222 18% 22%;
+    --ring: 243 90% 74%;
+
+    --live: 158 70% 50%;
+    --live-foreground: 222 40% 12%;
+
+    --sev-critical: 354 85% 66%;
+    --sev-high: 20 92% 62%;
+    --sev-medium: 40 95% 60%;
+    --sev-low: 220 90% 70%;
+    --sev-info: 217 15% 66%;
   }
 
   * {
@@ -84,8 +157,8 @@
   body {
     min-height: 100vh;
     background:
-      radial-gradient(1000px 600px at 0% 0%, hsl(var(--primary) / 0.06), transparent 60%),
-      radial-gradient(900px 500px at 100% 0%, hsl(190 95% 55% / 0.04), transparent 60%),
+      radial-gradient(1000px 600px at 0% 0%, hsl(var(--primary) / 0.045), transparent 60%),
+      radial-gradient(900px 500px at 100% 0%, hsl(var(--live) / 0.025), transparent 60%),
       hsl(var(--background));
   }
   *::selection {
@@ -101,6 +174,27 @@
   .glass-card {
     @apply rounded-xl border border-border bg-card/80 backdrop-blur-sm shadow-card;
   }
+  .dark .aurora::before,
+  .dark .aurora::after {
+    opacity: 0.32;
+  }
+
+  /* A terminal reads as a terminal in either theme. Overriding the tokens
+     locally means every child -- foreground, muted text, borders, and the
+     emerald/amber/red tone classes tuned for dark -- stays legible without
+     re-specifying a light variant for each one. */
+  .terminal-surface {
+    --background: 222 28% 9%;
+    --foreground: 216 30% 96%;
+    --muted-foreground: 217 14% 68%;
+    --border: 222 16% 22%;
+    --card: 222 26% 11%;
+    --surface: 222 26% 11%;
+    --surface-2: 222 20% 16%;
+    background-color: hsl(222 28% 9%);
+    color: hsl(var(--foreground));
+  }
+
   .grid-background {
     background-image:
       linear-gradient(hsl(var(--border) / 0.5) 1px, transparent 1px),
@@ -126,16 +220,18 @@
     height: 60rem;
     border-radius: 9999px;
     filter: blur(120px);
-    opacity: 0.35;
+    /* Tuned for the light ground; the dark theme restores the stronger wash
+       below, where a faint bloom would simply disappear. */
+    opacity: 0.14;
     animation: auroraShift 22s linear infinite;
   }
   .aurora::before {
-    background: radial-gradient(circle at 30% 30%, hsl(190 95% 55% / 0.55), transparent 60%);
+    background: radial-gradient(circle at 30% 30%, hsl(var(--primary) / 0.5), transparent 60%);
     top: -20rem;
     left: -15rem;
   }
   .aurora::after {
-    background: radial-gradient(circle at 70% 70%, hsl(265 85% 60% / 0.45), transparent 60%);
+    background: radial-gradient(circle at 70% 70%, hsl(var(--live) / 0.35), transparent 60%);
     bottom: -25rem;
     right: -20rem;
     animation-duration: 28s;
@@ -180,8 +276,8 @@
     background: conic-gradient(
       from 0deg,
       hsl(var(--primary) / 0.8),
-      hsl(265 85% 60% / 0.6),
-      hsl(190 95% 55% / 0.6),
+      hsl(var(--live) / 0.5),
+      hsl(var(--sev-low) / 0.5),
       hsl(var(--primary) / 0.8)
     );
     -webkit-mask:
@@ -362,5 +458,48 @@
   95% {
     transform: translate(0, 0);
     opacity: 0.45;
+  }
+}
+
+/* ------------------------------------------------------------------------
+ * Motion preferences
+ *
+ * The console runs several infinite ambient animations (aurora, shimmer,
+ * marquee, rotating borders, blinking carets). Users who ask their OS for
+ * reduced motion get all of it stopped -- not merely shortened -- while
+ * genuinely informative motion (progress, live pulses) degrades to a
+ * static state rather than disappearing.
+ * ------------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .aurora::before,
+  .aurora::after,
+  .shimmer-text,
+  .marquee,
+  .gradient-border::before {
+    animation: none !important;
+  }
+
+  .shimmer-text {
+    background: none;
+    -webkit-text-fill-color: currentColor;
+    color: hsl(var(--foreground));
+  }
+}
+
+/* Keyboard focus is never removed, only restyled -- one consistent ring. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: calc(var(--radius) - 2px);
   }
 }

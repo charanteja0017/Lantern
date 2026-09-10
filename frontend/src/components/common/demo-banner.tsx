@@ -16,7 +16,7 @@ export function DemoBanner() {
             All data shown here is simulated. Set{" "}
             <code className="rounded bg-surface-2 px-1 py-0.5">NEXT_PUBLIC_DEMO=false</code> and
             point <code className="rounded bg-surface-2 px-1 py-0.5">NEXT_PUBLIC_API_BASE_URL</code>{" "}
-            at your NovaHunter backend for real operations.
+            at your Lantern backend for real operations.
           </span>
         </span>
       </div>

@@ -410,7 +410,7 @@ def _provider_hint(model: str, api_base: str | None = None) -> str | None:
     if "integrate.api.nvidia.com" in base:
         return (
             "NVIDIA NIM uses an OpenAI-compatible endpoint. If your model was "
-            "entered as 'mistralai/...', NovaHunter now auto-normalizes it to "
+            "entered as 'mistralai/...', Lantern now auto-normalizes it to "
             "'openai/mistralai/...'."
         )
     if model.startswith("ollama/"):

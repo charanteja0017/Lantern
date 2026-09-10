@@ -1,4 +1,4 @@
-# NovaHunter report templates
+# Lantern report templates
 
 This folder holds the **canonical** templates the agent aims to produce,
 and the renderers consume. They are the single source of truth for the

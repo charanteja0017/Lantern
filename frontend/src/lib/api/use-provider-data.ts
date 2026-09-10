@@ -36,12 +36,12 @@ export type UseProviderDataOptions = {
 
 /**
  * Client-side data fetching hook that runs in `useEffect`, so relative
- * API paths, credentials and Clerk's session JWT (via the ApiProvider
+ * API paths and credentials (via the ApiProvider
  * auth-token bridge) all resolve correctly in the browser.
  *
  * Use this in place of top-level `await` in Server Components whenever a
  * page depends on the authenticated backend — Server Components can't
- * carry the user's Clerk session or set `credentials: "include"` cookies.
+ * set `credentials: "include"` cookies.
  *
  * Pass ``options.pollMs`` to enable silent background refresh — e.g. 5000
  * on the runs list so new runs, status transitions and live stat updates
@@ -88,7 +88,7 @@ export function useProviderData<T>(
       .catch((err: unknown) => {
         if (cancelled) return;
         // On silent refreshes we don't want a transient blip (e.g. network
-        // hiccup, Clerk token rotating) to blow away a perfectly good render.
+        // hiccup) to blow away a perfectly good render.
         // Swallow and log instead; the next tick will recover.
         if (silent) {
           // eslint-disable-next-line no-console

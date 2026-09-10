@@ -1,4 +1,4 @@
-# NovaHunter reverse proxy (HTTP-only, zero-config).
+# Lantern reverse proxy (HTTP-only, zero-config).
 #
 # Listens on :80 for any hostname / bare IP. This keeps the installer
 # dependency-free: no DNS / ACME / TLS setup is required to bring the

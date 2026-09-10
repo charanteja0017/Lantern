@@ -70,7 +70,7 @@ async def admin_test_integration(
         "integration.test",
         {
             "integration_id": integration_id,
-            "summary": "NovaHunter integration test event",
+            "summary": "Lantern integration test event",
             "title": "Integration test",
         },
     )

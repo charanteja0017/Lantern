@@ -109,7 +109,7 @@ export interface StrixProvider {
   listApiEndpoints(): Promise<EndpointDescriptor[]>;
 
   // Server-authoritative caller info — used by the UI to display the real
-  // backend role (which may differ from Clerk's raw org_role after admin
+  // backend role (which may differ from the raw role after admin
   // elevation). Returns null when the request is unauthenticated, so the UI
   // can gracefully fall back to local state.
   whoami(): Promise<WhoAmI | null>;

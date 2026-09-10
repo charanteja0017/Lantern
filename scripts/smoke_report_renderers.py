@@ -136,14 +136,14 @@ def main() -> int:
     assert 'class="finding sev-high"' in html
 
     data = json.loads(outputs["json"])
-    assert data["tool"]["name"] == "NovaHunter"
+    assert data["tool"]["name"] == "Lantern"
     assert len(data["findings"]) == 2
     assert data["summary"]["severityCounts"]["high"] == 1
 
     sarif = json.loads(outputs["sarif"])
     assert sarif["version"] == "2.1.0"
     assert len(sarif["runs"][0]["results"]) == 2
-    assert sarif["runs"][0]["tool"]["driver"]["name"] == "NovaHunter"
+    assert sarif["runs"][0]["tool"]["driver"]["name"] == "Lantern"
 
     csv_txt = outputs["csv"].decode("utf-8")
     assert "finding_id" in csv_txt.splitlines()[0]

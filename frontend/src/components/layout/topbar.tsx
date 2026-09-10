@@ -1,45 +1,16 @@
 "use client";
 
-import { KeyRound, LogOut, Menu, Moon, Search, Settings, Sun, User } from "lucide-react";
+import { Menu, Moon, Search, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
-import { useClerk, useUser } from "@clerk/nextjs";
 
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { CommandPalette } from "@/components/common/command-palette";
 import { NotificationsMenu } from "@/components/common/notifications-menu";
 import { StrixLogo } from "@/components/common/logo";
-import { config, hasClerk } from "@/lib/config";
-
-const STORAGE_KEY = "strix.profile";
-
-type Profile = { fullName: string; username: string; email: string; initials: string };
-
-const DEFAULT_PROFILE: Profile = {
-  fullName: "Harsha K.",
-  username: "harsha",
-  email: "harsha@strix.local",
-  initials: "HS",
-};
-
-function initials(name: string): string {
-  const parts = name.trim().split(/\s+/);
-  const chars = parts.slice(0, 2).map((p) => p[0]?.toUpperCase() ?? "");
-  return chars.join("") || "SX";
-}
+import { config } from "@/lib/config";
 
 function useIsMac(): boolean {
   const [isMac, setIsMac] = useState(false);
@@ -51,190 +22,14 @@ function useIsMac(): boolean {
   return isMac;
 }
 
-// User menu when Clerk is configured — real sign-in/out via Clerk SDK.
-function ClerkUserMenu() {
-  const { user, isLoaded } = useUser();
-  const { signOut } = useClerk();
-  const router = useRouter();
-
-  if (!isLoaded) {
-    return (
-      <div
-        aria-hidden
-        className="h-8 w-8 animate-pulse rounded-full bg-surface-2"
-      />
-    );
-  }
-
-  const fullName =
-    user?.fullName ||
-    [user?.firstName, user?.lastName].filter(Boolean).join(" ") ||
-    user?.primaryEmailAddress?.emailAddress ||
-    "Account";
-  const email = user?.primaryEmailAddress?.emailAddress ?? "";
-  const avatarUrl = user?.imageUrl ?? null;
-  const userInitials = initials(fullName);
-
-  const handleSignOut = async () => {
-    await signOut();
-    toast.success("Signed out");
-    router.push("/sign-in");
-  };
-
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button
-          aria-label="Open user menu"
-          className="rounded-full outline-none ring-primary/30 transition-shadow focus-visible:ring-2"
-        >
-          <Avatar>
-            {avatarUrl && <AvatarImage src={avatarUrl} alt={fullName} />}
-            <AvatarFallback>{userInitials}</AvatarFallback>
-          </Avatar>
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-64">
-        <DropdownMenuLabel>
-          <div className="flex items-center gap-2">
-            <Avatar className="h-8 w-8 text-xs">
-              {avatarUrl && <AvatarImage src={avatarUrl} alt={fullName} />}
-              <AvatarFallback>{userInitials}</AvatarFallback>
-            </Avatar>
-            <div className="min-w-0">
-              <div className="truncate text-sm font-medium text-foreground">{fullName}</div>
-              <div className="truncate text-[11px] text-muted-foreground">{email}</div>
-            </div>
-          </div>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link href="/profile">
-            <User className="h-4 w-4" />
-            Your profile
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href="/profile?tab=keys">
-            <KeyRound className="h-4 w-4" />
-            API keys
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href="/settings">
-            <Settings className="h-4 w-4" />
-            Workspace settings
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onSelect={(e) => {
-            e.preventDefault();
-            void handleSignOut();
-          }}
-          className="text-destructive"
-        >
-          <LogOut className="h-4 w-4" />
-          Sign out
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
-
-// User menu when Clerk isn't configured — localStorage-driven demo profile.
-function DemoUserMenu() {
-  const [profile, setProfile] = useState<Profile>(DEFAULT_PROFILE);
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    const load = () => {
-      try {
-        const raw = window.localStorage.getItem(STORAGE_KEY);
-        if (raw) {
-          const parsed = JSON.parse(raw) as Partial<Profile>;
-          setProfile({
-            fullName: parsed.fullName ?? DEFAULT_PROFILE.fullName,
-            username: parsed.username ?? DEFAULT_PROFILE.username,
-            email: parsed.email ?? DEFAULT_PROFILE.email,
-            initials:
-              parsed.initials ??
-              (parsed.fullName ? initials(parsed.fullName) : DEFAULT_PROFILE.initials),
-          });
-        }
-        setAvatarUrl(window.localStorage.getItem("strix.avatar"));
-      } catch {
-        /* ignore */
-      }
-    };
-    load();
-    window.addEventListener("storage", load);
-    return () => window.removeEventListener("storage", load);
-  }, []);
-
-  const onSignOut = () => {
-    toast.success("Signed out. (Demo mode — Clerk will handle this in live mode.)");
-  };
-
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button
-          aria-label="Open user menu"
-          className="rounded-full outline-none ring-primary/30 transition-shadow focus-visible:ring-2"
-        >
-          <Avatar>
-            {avatarUrl && <AvatarImage src={avatarUrl} alt={profile.fullName} />}
-            <AvatarFallback>{profile.initials}</AvatarFallback>
-          </Avatar>
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-64">
-        <DropdownMenuLabel>
-          <div className="flex items-center gap-2">
-            <Avatar className="h-8 w-8 text-xs">
-              {avatarUrl && <AvatarImage src={avatarUrl} alt={profile.fullName} />}
-              <AvatarFallback>{profile.initials}</AvatarFallback>
-            </Avatar>
-            <div className="min-w-0">
-              <div className="truncate text-sm font-medium text-foreground">
-                {profile.fullName}
-              </div>
-              <div className="truncate text-[11px] text-muted-foreground">{profile.email}</div>
-            </div>
-          </div>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link href="/profile">
-            <User className="h-4 w-4" />
-            Your profile
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href="/profile?tab=keys">
-            <KeyRound className="h-4 w-4" />
-            API keys
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href="/settings">
-            <Settings className="h-4 w-4" />
-            Workspace settings
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onSelect={onSignOut} className="text-destructive">
-          <LogOut className="h-4 w-4" />
-          Sign out
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
-
 export function Topbar({ onOpenNav }: { onOpenNav?: () => void }) {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
+
+  // The active theme is unknowable on the server, so the icon renders as an
+  // invisible placeholder until mount. Both sides then agree on the first
+  // pass, and the real icon appears without a layout shift.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const isMac = useIsMac();
 
@@ -257,10 +52,6 @@ export function Topbar({ onOpenNav }: { onOpenNav?: () => void }) {
   }, [paletteOpen]);
 
   const shortcut = isMac ? "⌘K" : "Ctrl K";
-  // `hasClerk()` is derived from NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY, which is
-  // inlined at build time, so this branch is effectively a static split —
-  // safe to choose between two components with different hook shapes.
-  const clerkEnabled = hasClerk();
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border bg-background/80 px-3 backdrop-blur-md md:gap-3 md:px-4">
@@ -314,13 +105,17 @@ export function Topbar({ onOpenNav }: { onOpenNav?: () => void }) {
           size="icon"
           variant="ghost"
           aria-label="Toggle theme"
-          onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+          onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
         >
-          {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+          {!mounted ? (
+            <Sun className="h-4 w-4 opacity-0" aria-hidden />
+          ) : resolvedTheme === "dark" ? (
+            <Sun className="h-4 w-4" />
+          ) : (
+            <Moon className="h-4 w-4" />
+          )}
         </Button>
         <NotificationsMenu />
-
-        {clerkEnabled ? <ClerkUserMenu /> : <DemoUserMenu />}
       </div>
 
       <CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} />

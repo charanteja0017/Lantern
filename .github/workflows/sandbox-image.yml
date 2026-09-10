@@ -13,11 +13,11 @@
 #   A) Link package to repo (preferred, keeps using GITHUB_TOKEN):
 #      1. Open https://github.com/users/<owner>/packages?repo_name=<repo>
 #         (replace <owner>/<repo>; for orgs use the org Packages tab.)
-#      2. Click package "novahunter-sandbox" → "Package settings".
+#      2. Click package "lantern-sandbox" → "Package settings".
 #      3. "Manage Actions access" → "Add repository" → select this repo → Role
 #         "Write" (or Admin). Save.
 #      4. Re-run the failed workflow.
-#   B) Or delete the empty/broken "novahunter-sandbox" package in that UI and
+#   B) Or delete the empty/broken "lantern-sandbox" package in that UI and
 #      re-run: first successful push often auto-links the package to the repo.
 #   C) Or add repo secret GHCR_PUSH_TOKEN (classic PAT: write:packages + at
 #      least read:packages; for private repos add repo scope). The login step

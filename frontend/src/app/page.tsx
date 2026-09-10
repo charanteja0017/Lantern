@@ -125,12 +125,15 @@ export default function LandingPage() {
           <Link href="/docs" className="transition-colors hover:text-foreground">API</Link>
         </nav>
         <div className="flex items-center gap-2">
-          <Link href="/sign-in" className="hidden sm:inline-flex">
-            <Button variant="ghost" size="sm">Sign in</Button>
-          </Link>
-          <Link href="/sign-up">
+          <a
+            href="https://github.com/charanteja0017/NovaHunter"
+            className="hidden sm:inline-flex"
+          >
+            <Button variant="ghost" size="sm">GitHub</Button>
+          </a>
+          <Link href="/dashboard">
             <Button size="sm">
-              Get started <ArrowRight className="h-4 w-4" />
+              Open dashboard <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
         </div>
@@ -152,9 +155,9 @@ export default function LandingPage() {
             remediation-ready.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Link href="/sign-up">
+            <Link href="/dashboard">
               <Button size="lg">
-                Start free trial <ArrowRight className="h-4 w-4" />
+                Open the dashboard <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
             <Link href="/dashboard">
@@ -165,7 +168,7 @@ export default function LandingPage() {
             </Link>
           </div>
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <CopyCommand command="curl -sSL https://novahunter.ai/install | bash" />
+            <CopyCommand command="git clone https://github.com/charanteja0017/NovaHunter.git && cd NovaHunter/deploy && docker compose up -d" />
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
               One command. Sandbox-isolated. Deploys anywhere.
@@ -394,12 +397,12 @@ export default function LandingPage() {
                 Ship a real finding in the next 15 minutes
               </h2>
               <p className="mt-3 text-muted-foreground">
-                Start a free trial, plug in your target, and let the agents go to work.
+                Clone it, plug in your target, and let the agents go to work — on your own hardware.
               </p>
               <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-                <Link href="/sign-up">
+                <Link href="/dashboard">
                   <Button size="lg">
-                    Start free trial <ArrowRight className="h-4 w-4" />
+                    Open the dashboard <ArrowRight className="h-4 w-4" />
                   </Button>
                 </Link>
                 <Link href="/docs">
@@ -409,7 +412,7 @@ export default function LandingPage() {
                 </Link>
               </div>
               <div className="mt-6 flex items-center justify-center">
-                <CopyCommand command="curl -sSL https://novahunter.ai/install | bash" />
+                <CopyCommand command="git clone https://github.com/charanteja0017/NovaHunter.git && cd NovaHunter/deploy && docker compose up -d" />
               </div>
             </div>
           </div>
@@ -426,10 +429,9 @@ export default function LandingPage() {
               <span className="hidden md:inline">· Autonomous security agents, on your rails.</span>
             </div>
             <div className="flex items-center gap-4">
-              <Link href="/sign-in" className="hover:text-foreground">Sign in</Link>
-              <Link href="/sign-up" className="hover:text-foreground">Sign up</Link>
+              <Link href="/dashboard" className="hover:text-foreground">Dashboard</Link>
               <Link href="/docs" className="hover:text-foreground">API</Link>
-              <a href="mailto:hello@novahunter.ai" className="hover:text-foreground">
+              <a href="https://github.com/charanteja0017/NovaHunter/issues" className="hover:text-foreground">
                 Contact
               </a>
             </div>

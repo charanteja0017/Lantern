@@ -1,8 +1,8 @@
-# NovaHunter — Project Brief
+# Lantern — Project Brief
 
-NovaHunter is a **self-hosted, AI-driven offensive-security control plane**. It lets you run autonomous security-testing “agent” campaigns on your own infrastructure, with a full web dashboard for **runs**, **findings**, **reports**, and **operator tooling**.
+Lantern is a **self-hosted, AI-driven offensive-security control plane**. It lets you run autonomous security-testing “agent” campaigns on your own infrastructure, with a full web dashboard for **runs**, **findings**, **reports**, and **operator tooling**.
 
-It’s built on top of the open-source **Strix** agent runtime (NovaHunter is a fork that keeps the Strix CLI intact), and adds a production-style web stack around it.
+It’s built on top of the open-source **Strix** agent runtime (Lantern is a fork that keeps the Strix CLI intact), and adds a production-style web stack around it.
 
 ---
 
@@ -80,5 +80,5 @@ Typical flow:
 
 ## Safety note
 
-NovaHunter is an offensive-security tool. Use it only against systems you own or have explicit permission to test.
+Lantern is an offensive-security tool. Use it only against systems you own or have explicit permission to test.
 

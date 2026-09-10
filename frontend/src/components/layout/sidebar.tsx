@@ -16,36 +16,60 @@ import {
   PlayCircle,
   Settings,
   ShieldAlert,
-  Users,
   X,
 } from "lucide-react";
 import { StrixLogo } from "@/components/common/logo";
 import { cn } from "@/lib/utils";
 import { config } from "@/lib/config";
 
-const nav = [
-  { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
-  { href: "/runs", label: "Runs", icon: Activity },
-  { href: "/runs/new", label: "New Scan", icon: PlayCircle },
-  { href: "/findings", label: "Findings", icon: Bug },
-  { href: "/reports", label: "Reports", icon: FileText },
-  { href: "/analytics", label: "Analytics", icon: BarChart3 },
-  { href: "/notifications", label: "Notifications", icon: Bell },
-  { href: "/docs", label: "API Docs", icon: BookOpen },
-  { href: "/settings", label: "Settings", icon: Settings },
+/**
+ * Navigation is grouped by what the operator is trying to DO, not by a flat
+ * alphabet of destinations. Fourteen equal-weight links previously sat in two
+ * buckets; three small groups of three are scannable without reading each
+ * label. "New scan" left this list entirely — it is an action, not a place,
+ * and now lives in the primary button above the nav.
+ */
+const navGroups: {
+  heading: string;
+  items: { href: string; label: string; icon: React.ComponentType<{ className?: string }> }[];
+}[] = [
+  {
+    heading: "Operate",
+    items: [
+      { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
+      { href: "/runs", label: "Runs", icon: Activity },
+      { href: "/findings", label: "Findings", icon: Bug },
+    ],
+  },
+  {
+    heading: "Analyze",
+    items: [
+      { href: "/reports", label: "Reports", icon: FileText },
+      { href: "/analytics", label: "Analytics", icon: BarChart3 },
+    ],
+  },
+  {
+    heading: "Workspace",
+    items: [
+      { href: "/notifications", label: "Notifications", icon: Bell },
+      { href: "/docs", label: "API Docs", icon: BookOpen },
+      { href: "/settings", label: "Settings", icon: Settings },
+    ],
+  },
 ];
 
 const adminNav = [
   { href: "/admin", label: "Admin Home", icon: ShieldAlert },
   { href: "/health", label: "Health", icon: HeartPulse },
-  { href: "/admin/organizations", label: "Organizations", icon: Users },
   { href: "/admin/rate-limits", label: "Rate Limits", icon: Activity },
   { href: "/admin/audit", label: "Audit Log", icon: FileText },
 ];
 
+const allNavItems = [...navGroups.flatMap((g) => g.items), ...adminNav];
+
 function useActiveMatcher() {
   const pathname = usePathname();
-  const allHrefs = [...nav, ...adminNav].map((i) => i.href);
+  const allHrefs = allNavItems.map((i) => i.href);
   const bestMatch = allHrefs
     .filter((h) => pathname === h || pathname.startsWith(h + "/"))
     .sort((a, b) => b.length - a.length)[0];
@@ -139,12 +163,36 @@ function SidebarFooter() {
   );
 }
 
+function NewScanAction({ onNavigate }: { onNavigate?: () => void }) {
+  return (
+    <div className="px-3 pt-3">
+      <Link
+        href="/runs/new"
+        onClick={onNavigate}
+        className="flex h-9 w-full items-center justify-center gap-2 rounded-md bg-primary text-sm font-medium text-primary-foreground shadow-glow transition-colors hover:bg-primary/90"
+      >
+        <PlayCircle className="h-4 w-4" />
+        New scan
+      </Link>
+    </div>
+  );
+}
+
 function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const isActive = useActiveMatcher();
   return (
     <nav className="flex-1 overflow-y-auto p-3 scrollbar-thin">
-      <NavSection heading="Workspace" items={nav} isActive={isActive} onNavigate={onNavigate} />
-      <div className="mt-6">
+      {navGroups.map((group, i) => (
+        <div key={group.heading} className={i > 0 ? "mt-5" : undefined}>
+          <NavSection
+            heading={group.heading}
+            items={group.items}
+            isActive={isActive}
+            onNavigate={onNavigate}
+          />
+        </div>
+      ))}
+      <div className="mt-5">
         <NavSection
           heading="Administration"
           items={adminNav}
@@ -158,8 +206,9 @@ function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
 
 export function Sidebar() {
   return (
-    <aside className="hidden w-60 shrink-0 flex-col border-r border-border bg-surface/60 backdrop-blur-md md:flex">
+    <aside className="hidden w-60 shrink-0 flex-col border-r border-border bg-surface md:flex">
       <SidebarBrand />
+      <NewScanAction />
       <SidebarNav />
       <SidebarFooter />
     </aside>
@@ -236,6 +285,7 @@ export function MobileSidebar({
             <X className="h-4 w-4" />
           </button>
         </div>
+        <NewScanAction onNavigate={() => onOpenChange(false)} />
         <SidebarNav onNavigate={() => onOpenChange(false)} />
         <SidebarFooter />
       </aside>

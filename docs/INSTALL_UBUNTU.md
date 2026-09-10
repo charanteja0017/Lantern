@@ -1,6 +1,6 @@
-# Installing NovaHunter on Ubuntu (backend + frontend)
+# Installing Lantern on Ubuntu (backend + frontend)
 
-This guide brings up the **entire NovaHunter platform** on a fresh
+This guide brings up the **entire Lantern platform** on a fresh
 Ubuntu (or Debian) VPS with nothing more than a public IP address.
 
 Both tiers ship in a single `docker compose` stack:
@@ -14,9 +14,9 @@ Both tiers ship in a single `docker compose` stack:
 You do **not** need a domain name, TLS certificate, LLM API key, or Clerk
 account to start. Those are all configured later from the admin UI.
 
-> **Note on paths** — the examples below use `/opt/novahunter` as the
+> **Note on paths** — the examples below use `/opt/lantern` as the
 > location of your cloned repo. Substitute whichever directory you cloned
-> the repo into (e.g. `~/NovaHunter` or `/srv/NovaHunter`). The installer
+> the repo into (e.g. `~/Lantern` or `/srv/Lantern`). The installer
 > always uses the checkout it is launched from, never a hard-coded path.
 
 ---
@@ -44,8 +44,8 @@ private repos and deploy keys), then run the installer from inside the
 checkout:
 
 ```bash
-git clone https://github.com/MaramHarsha/NovaHunter.git
-cd NovaHunter
+git clone https://github.com/charanteja0017/NovaHunter.git
+cd Lantern
 sudo bash scripts/setup.sh
 ```
 
@@ -60,7 +60,7 @@ The installer will:
 5. Print the dashboard URL like:
 
    ```
-   NovaHunter is live!
+   Lantern is live!
        Dashboard : http://203.0.113.17/
        API       : http://203.0.113.17/api/
        Health    : http://203.0.113.17/api/health
@@ -109,8 +109,8 @@ To unlock production features, open the admin UI and fill in the config:
 2. Add your LLM provider + API key (OpenAI, Anthropic, OpenRouter, Gemini,
    Bedrock, Azure…).
 3. Optionally connect Clerk for authentication.
-4. Edit `/opt/novahunter/deploy/.env`, set `STRIX_ENV=production`, then
-   `docker compose -f /opt/novahunter/deploy/docker-compose.yml restart api`.
+4. Edit `/opt/lantern/deploy/.env`, set `STRIX_ENV=production`, then
+   `docker compose -f /opt/lantern/deploy/docker-compose.yml restart api`.
 
 > All of the Clerk and LLM variables are listed in `deploy/.env.example`.
 > You can set them from the dashboard, or edit `deploy/.env` directly — both
@@ -126,16 +126,16 @@ To unlock production features, open the admin UI and fill in the config:
    sudo ufw allow 80/tcp
    sudo ufw allow 443/tcp
    ```
-3. Edit `/opt/novahunter/deploy/.env`:
+3. Edit `/opt/lantern/deploy/.env`:
    ```env
    STRIX_DOMAIN=your.domain.tld
    STRIX_TLS_EMAIL=admin@your.domain.tld
    ```
-4. In `/opt/novahunter/deploy/Caddyfile` replace the `:80 { ... }` block
+4. In `/opt/lantern/deploy/Caddyfile` replace the `:80 { ... }` block
    with `{$STRIX_DOMAIN} { ... }` and delete the `auto_https off` line.
 5. Reload the proxy:
    ```bash
-   cd /opt/novahunter/deploy
+   cd /opt/lantern/deploy
    sudo docker compose --env-file .env up -d caddy
    ```
 
@@ -148,7 +148,7 @@ Caddy will now obtain and renew a Let's Encrypt certificate automatically.
 All commands below assume the default install path:
 
 ```bash
-cd /opt/novahunter/deploy
+cd /opt/lantern/deploy
 
 # Live status:
 sudo docker compose ps
@@ -175,12 +175,12 @@ sudo docker compose down -v
 
 ### Changing `.env` and redeploying
 
-All runtime config lives in `/opt/novahunter/deploy/.env`. Edit it with any
+All runtime config lives in `/opt/lantern/deploy/.env`. Edit it with any
 editor, then redeploy — the correct command depends on **which variable**
 you changed:
 
 ```bash
-cd /opt/novahunter/deploy
+cd /opt/lantern/deploy
 sudo nano .env            # or `vi .env`, `vim .env`, etc.
 ```
 
@@ -211,7 +211,7 @@ fresh install already hits the real backend. If an earlier install came
 up in demo mode, fix it with:
 
 ```bash
-cd /opt/novahunter/deploy
+cd /opt/lantern/deploy
 echo 'NEXT_PUBLIC_DEMO=false' | sudo tee -a .env
 sudo docker compose --env-file .env up -d --build frontend
 ```
@@ -227,7 +227,7 @@ workflow matches your deployment, then re-run the script from the same
 checkout:
 
 ```bash
-cd /path/to/your/NovaHunter   # wherever you cloned it
+cd /path/to/your/Lantern   # wherever you cloned it
 git pull                      # or: git fetch && git checkout <tag>
 sudo bash scripts/setup.sh --dry-run   # preview the redeploy
 sudo bash scripts/setup.sh             # apply
@@ -255,9 +255,9 @@ Useful flags:
 Daily `pg_dump` of the metadata DB:
 
 ```bash
-cd /opt/novahunter/deploy
+cd /opt/lantern/deploy
 sudo docker compose exec postgres pg_dump -U strix strix \
-  | gzip > "novahunter-$(date +%F).sql.gz"
+  | gzip > "lantern-$(date +%F).sql.gz"
 ```
 
 The scan artifact volume (`strix_runs`) is also worth snapshotting:
@@ -275,13 +275,13 @@ sudo docker run --rm \
 
 ```bash
 sudo ufw allow 22/tcp     # SSH
-sudo ufw allow 80/tcp     # NovaHunter (HTTP)
+sudo ufw allow 80/tcp     # Lantern (HTTP)
 # sudo ufw allow 443/tcp  # only if you enabled HTTPS above
 sudo ufw --force enable
 sudo ufw status numbered
 ```
 
-That is the only ingress NovaHunter needs.
+That is the only ingress Lantern needs.
 
 ---
 
@@ -290,14 +290,14 @@ That is the only ingress NovaHunter needs.
 ### The installer says `permission denied` or `Cannot connect to Docker daemon`
 
 Re-run it with `sudo` (it expects root privileges to install Docker and
-write to `/opt/novahunter`).
+write to `/opt/lantern`).
 
 ### The dashboard loads but API calls fail
 
 Check the backend log:
 
 ```bash
-sudo docker compose -f /opt/novahunter/deploy/docker-compose.yml logs -f api
+sudo docker compose -f /opt/lantern/deploy/docker-compose.yml logs -f api
 ```
 
 The most common cause is the API waiting on Postgres/Redis; give it another
@@ -308,12 +308,12 @@ The most common cause is the API waiting on Postgres/Redis; give it another
 From inside your checkout:
 
 ```bash
-cd /path/to/NovaHunter/deploy
+cd /path/to/Lantern/deploy
 sudo docker compose down -v
 cd ..
 # Optionally re-clone into a fresh directory if you want a clean tree:
-#   rm -rf /path/to/NovaHunter
-#   git clone https://github.com/MaramHarsha/NovaHunter.git
+#   rm -rf /path/to/Lantern
+#   git clone https://github.com/charanteja0017/NovaHunter.git
 sudo bash scripts/setup.sh
 ```
 
@@ -337,7 +337,7 @@ Stop whatever is holding it (e.g. nginx/apache) or change the host port:
 # In deploy/docker-compose.yml under the caddy service, change:
 #   - "80:80"   →   - "8080:80"
 # then re-run:
-sudo docker compose -f /opt/novahunter/deploy/docker-compose.yml up -d caddy
+sudo docker compose -f /opt/lantern/deploy/docker-compose.yml up -d caddy
 ```
 
 Browse to `http://<public-ip>:8080/`.

@@ -2,7 +2,7 @@
 
 import { config } from "@/lib/config";
 
-const STORAGE_KEY = "novahunter.docs.auth.v1";
+const STORAGE_KEY = "lantern.docs.auth.v1";
 const DEFAULT_BASE = `${config.apiHost}/v1`;
 
 export type DocsAuth = {
@@ -36,13 +36,13 @@ export function loadAuth(): DocsAuth {
 export function saveAuth(auth: DocsAuth): void {
   if (typeof window === "undefined") return;
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(auth));
-  window.dispatchEvent(new CustomEvent("novahunter:docs-auth"));
+  window.dispatchEvent(new CustomEvent("lantern:docs-auth"));
 }
 
 export function clearAuth(): void {
   if (typeof window === "undefined") return;
   window.localStorage.removeItem(STORAGE_KEY);
-  window.dispatchEvent(new CustomEvent("novahunter:docs-auth"));
+  window.dispatchEvent(new CustomEvent("lantern:docs-auth"));
 }
 
 export function maskKey(key: string): string {
@@ -54,11 +54,11 @@ export function maskKey(key: string): string {
 export function subscribeAuth(listener: () => void): () => void {
   if (typeof window === "undefined") return () => {};
   const handler = () => listener();
-  window.addEventListener("novahunter:docs-auth", handler);
+  window.addEventListener("lantern:docs-auth", handler);
   window.addEventListener("storage", (e) => {
     if (e.key === STORAGE_KEY) listener();
   });
   return () => {
-    window.removeEventListener("novahunter:docs-auth", handler);
+    window.removeEventListener("lantern:docs-auth", handler);
   };
 }

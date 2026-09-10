@@ -29,7 +29,6 @@ import type {
   LlmConfigRead,
   LlmConfigWrite,
   LlmTestResult,
-  OrgSummary,
 } from "@/lib/types";
 
 type ProviderKind =
@@ -188,7 +187,6 @@ function providerForModel(model: string, apiBase: string): ProviderKind {
 }
 
 export default function SettingsPage() {
-  const [orgs, setOrgs] = useState<OrgSummary[]>([]);
   const [serverCfg, setServerCfg] = useState<LlmConfigRead | null>(null);
   const [provider, setProvider] = useState<ProviderKind>("anthropic/claude-sonnet");
   const [model, setModel] = useState<string>(DEFAULTS["anthropic/claude-sonnet"].model);
@@ -248,12 +246,6 @@ export default function SettingsPage() {
         }
       } finally {
         if (!cancelled) setLoading(false);
-      }
-      try {
-        const list = await provider.listOrganizations();
-        if (!cancelled) setOrgs(list);
-      } catch {
-        if (!cancelled) setOrgs([]);
       }
     })();
     return () => {
@@ -438,10 +430,6 @@ export default function SettingsPage() {
               badge={config.demo ? "warning" : "success"}
             />
             <Field label="API base URL" value={config.apiBaseUrl || "—"} mono />
-            <Field
-              label="Clerk"
-              value={config.clerk.publishableKey ? "configured" : "not configured"}
-            />
           </CardContent>
         </Card>
 
@@ -555,7 +543,7 @@ export default function SettingsPage() {
                   spellCheck={false}
                 />
                 <p className="mt-1 text-[11px] text-muted-foreground">
-                  This cap is enforced by NovaHunter at runtime to avoid quota errors.
+                  This cap is enforced by Lantern at runtime to avoid quota errors.
                 </p>
               </div>
             </div>
@@ -978,32 +966,6 @@ export default function SettingsPage() {
             <Button variant="outline" className="w-full">
               Save limits
             </Button>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Organizations</CardTitle>
-            <CardDescription>Workspaces you belong to.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {orgs.length === 0 && (
-              <p className="text-sm text-muted-foreground">No organizations loaded.</p>
-            )}
-            {orgs.map((o) => (
-              <div
-                key={o.id}
-                className="flex items-center justify-between rounded-md border border-border bg-surface/60 p-3"
-              >
-                <div>
-                  <div className="text-sm font-medium">{o.name}</div>
-                  <div className="text-xs text-muted-foreground">
-                    {o.memberCount} members · slug: {o.slug}
-                  </div>
-                </div>
-                <Badge variant="outline">owner</Badge>
-              </div>
-            ))}
           </CardContent>
         </Card>
       </div>

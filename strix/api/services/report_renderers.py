@@ -57,7 +57,7 @@ class ReportBundle:
     findings: list[FindingReport]
     severity_counts: dict[str, int] = field(default_factory=dict)
     generated_at: datetime = field(default_factory=lambda: datetime.now(UTC))
-    tool: str = "NovaHunter"
+    tool: str = "Lantern"
     tool_version: str = "0.1.0"
 
     @classmethod
@@ -447,7 +447,7 @@ def _render_sarif(bundle: ReportBundle) -> RenderResult:
     }
 
     for f in bundle.findings:
-        rule_id = f.cwe[0] if f.cwe else _slug(f.title)[:32] or "novahunter.finding"
+        rule_id = f.cwe[0] if f.cwe else _slug(f.title)[:32] or "lantern.finding"
         rules.setdefault(
             rule_id,
             {
@@ -501,7 +501,7 @@ def _render_sarif(bundle: ReportBundle) -> RenderResult:
                     "driver": {
                         "name": bundle.tool,
                         "version": bundle.tool_version,
-                        "informationUri": "https://novahunter.dev",
+                        "informationUri": "https://lantern.dev",
                         "rules": [v for _, v in sorted(rules.items())],
                     }
                 },

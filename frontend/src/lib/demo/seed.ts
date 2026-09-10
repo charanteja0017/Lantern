@@ -783,10 +783,10 @@ export function buildDemoSystemHealth(): SystemHealthSnapshot {
         meta: { path: "/var/run/docker.sock" },
       },
       {
-        name: "clerk",
+        name: "auth",
         status: "disabled",
         latencyMs: null,
-        detail: "Clerk not configured (demo mode)",
+        detail: "No accounts in this build",
         meta: {},
       },
       {

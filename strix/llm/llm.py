@@ -343,7 +343,7 @@ class LLM:
 
         accumulated = normalize_tool_format(accumulated)
         accumulated = fix_incomplete_tool_call(_truncate_to_first_function(accumulated))
-        if completion_args.get("metadata", {}).get("novahunter_auto_mode"):
+        if completion_args.get("metadata", {}).get("lantern_auto_mode"):
             if _looks_low_quality(accumulated, role=self.role):
                 raise _LowQualityResponseError("Auto router: low quality response; retrying.")
         yield LLMResponse(
@@ -430,9 +430,9 @@ class LLM:
                 if isinstance(args["metadata"], dict):
                     args["metadata"] = {
                         **args["metadata"],
-                        "novahunter_auto_mode": True,
-                        "novahunter_auto_strategy": auto_strategy,
-                        "novahunter_auto_selected": chosen,
+                        "lantern_auto_mode": True,
+                        "lantern_auto_strategy": auto_strategy,
+                        "lantern_auto_selected": chosen,
                     }
 
         return args

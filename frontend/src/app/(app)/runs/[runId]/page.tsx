@@ -424,12 +424,12 @@ export default function RunDetailPage() {
       />
 
       {run.status === "failed" && failureMessage ? (
-        <Card className="border-red-400/30 bg-red-400/5">
-          <CardContent className="flex items-start gap-2 p-3 text-xs text-red-200 md:p-4">
+        <Card className="border-severity-critical/30 bg-severity-critical/5">
+          <CardContent className="flex items-start gap-2 p-3 text-xs text-severity-critical md:p-4">
             <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
             <div className="min-w-0 flex-1">
               <div className="font-medium">Run failed</div>
-              <div className="mt-1 whitespace-pre-wrap break-words text-red-100/80">
+              <div className="mt-1 whitespace-pre-wrap break-words text-severity-critical/80">
                 {failureMessage}
               </div>
             </div>
@@ -438,8 +438,8 @@ export default function RunDetailPage() {
       ) : null}
 
       {run.throttle ? (
-        <Card className="border-amber-400/30 bg-amber-400/5">
-          <CardContent className="flex flex-col gap-2 p-3 text-xs text-amber-200 md:flex-row md:items-center md:justify-between md:p-4">
+        <Card className="border-severity-medium/30 bg-severity-medium/5">
+          <CardContent className="flex flex-col gap-2 p-3 text-xs text-severity-medium md:flex-row md:items-center md:justify-between md:p-4">
             <div className="flex items-start gap-2">
               <AlertTriangle className="mt-0.5 h-4 w-4" />
               <div>
@@ -448,7 +448,7 @@ export default function RunDetailPage() {
               </div>
             </div>
             {run.throttle.retryAt ? (
-              <div className="text-amber-300">
+              <div className="text-severity-medium">
                 Retry {formatRelativeTime(run.throttle.retryAt)}
               </div>
             ) : null}
@@ -630,9 +630,19 @@ export default function RunDetailPage() {
 }
 
 function RunSubheader({ run }: { run: RunDetail }) {
+  const isLive = run.status === "running" || run.status === "throttled";
   return (
     <span className="flex flex-wrap items-center gap-2">
       <StatusBadge status={run.status} />
+      {/* A moving indicator is the fastest way to tell an in-flight run from a
+          finished one without parsing the status word. Reduced-motion users
+          get the dot without the pulse, via the global media query. */}
+      {isLive ? (
+        <span className="inline-flex items-center gap-1.5 text-xs text-live">
+          <span className="h-1.5 w-1.5 animate-pulse-dot rounded-full bg-live" />
+          streaming
+        </span>
+      ) : null}
       <Badge variant="default" className="font-mono text-[11px]">
         {run.id}
       </Badge>
@@ -664,9 +674,14 @@ function StatTile({
   label: string;
   value: string;
   subtitle?: string;
-  tone?: "default" | "danger";
+  tone?: "default" | "danger" | "live";
 }) {
-  const toneClass = tone === "danger" ? "text-red-300" : "text-muted-foreground";
+  const toneClass =
+    tone === "danger"
+      ? "text-severity-critical"
+      : tone === "live"
+        ? "text-live"
+        : "text-muted-foreground";
   return (
     <Card>
       <CardContent className="flex items-center justify-between p-3 md:p-4">
@@ -794,7 +809,7 @@ function AgentsPanel({ agents }: { agents: AgentNode[] }) {
               <StatCell label="Tokens" value={formatNumber(a.tokens)} />
             </div>
             {a.errorMessage ? (
-              <div className="rounded-md border border-red-500/30 bg-red-500/10 p-2 text-[11px] text-red-200">
+              <div className="rounded-md border border-severity-critical/30 bg-severity-critical/10 p-2 text-[11px] text-severity-critical">
                 {a.errorMessage}
               </div>
             ) : null}
@@ -1063,10 +1078,10 @@ function TerminalBlock({
   return (
     <div className="overflow-hidden rounded border border-border bg-[#0b0f14]">
       <div className="flex items-start gap-2 border-b border-white/5 px-3 py-2">
-        <span className="select-none font-mono text-xs text-emerald-400">
+        <span className="select-none font-mono text-xs text-live">
           {prompt}
         </span>
-        <pre className="min-w-0 flex-1 whitespace-pre-wrap break-all font-mono text-xs text-emerald-100">
+        <pre className="min-w-0 flex-1 whitespace-pre-wrap break-all font-mono text-xs text-live/90">
           {command}
         </pre>
       </div>
@@ -1115,7 +1130,7 @@ function LiveBrowserPanel({
           onError={onError}
         />
         {vncLoadError ? (
-          <div className="rounded-md border border-amber-400/40 bg-amber-500/10 p-3 text-xs text-amber-200">
+          <div className="rounded-md border border-severity-medium/40 bg-severity-medium/10 p-3 text-xs text-severity-medium">
             {vncLoadError}
           </div>
         ) : null}

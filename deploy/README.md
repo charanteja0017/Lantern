@@ -1,4 +1,4 @@
-# NovaHunter — Deployment
+# Lantern — Deployment
 
 Production-ready `docker compose` stack that brings up the **entire** platform
 on a single Ubuntu/Debian host — backend **and** frontend included:
@@ -18,8 +18,8 @@ Clone the repo onto the host yourself (the installer no longer does this —
 so private repos work without baking credentials into the pipeline), then:
 
 ```bash
-git clone https://github.com/MaramHarsha/NovaHunter.git
-cd NovaHunter
+git clone https://github.com/charanteja0017/NovaHunter.git
+cd Lantern
 sudo bash scripts/setup.sh
 ```
 
@@ -67,7 +67,7 @@ and `apt-get`) without touching the system.
 Pull updates with your usual git workflow, then re-run the installer:
 
 ```bash
-cd /path/to/your/NovaHunter/checkout
+cd /path/to/your/Lantern/checkout
 git pull                          # or: git fetch && git checkout <tag>
 sudo bash scripts/setup.sh --dry-run   # preview
 sudo bash scripts/setup.sh             # apply
@@ -76,8 +76,8 @@ sudo bash scripts/setup.sh             # apply
 ## Manual alternative
 
 ```bash
-git clone https://github.com/MaramHarsha/NovaHunter.git
-cd NovaHunter/deploy
+git clone https://github.com/charanteja0017/NovaHunter.git
+cd Lantern/deploy
 cp .env.example .env
 # edit .env only if you want to customise Postgres credentials
 docker compose --env-file .env up -d --build

@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
-import { ClerkProvider } from "@/components/providers/clerk-provider";
 import { Providers } from "@/components/providers/providers";
 import { config } from "@/lib/config";
 import "./globals.css";
@@ -21,8 +20,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#0a0f1d" },
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: light)", color: "#f7f9fc" },
+    { media: "(prefers-color-scheme: dark)", color: "#141821" },
   ],
 };
 
@@ -30,9 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${mono.variable}`}>
       <body className="min-h-screen antialiased">
-        <ClerkProvider>
-          <Providers>{children}</Providers>
-        </ClerkProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
