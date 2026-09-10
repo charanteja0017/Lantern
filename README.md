@@ -24,6 +24,32 @@ Docker command. Every scan, finding and report stays on your hardware.
 
 ---
 
+## Contents
+
+- [Run the whole stack with one command](#run-the-whole-stack-with-one-command)
+- [Bring your own API key](#bring-your-own-api-key)
+- [Testing your own products](#testing-your-own-products)
+- [What the UI actually does](#what-the-ui-actually-does)
+- [No accounts, at all](#no-accounts-at-all)
+- [What's included](#whats-included)
+- [Running it on a server instead of your laptop](#optional-run-it-on-a-server-instead-of-your-laptop)
+- [CLI usage](#cli-usage)
+- [Capabilities](#capabilities-inherited-from-strix)
+- [Architecture](#architecture)
+- [Project layout](#project-layout)
+- [Environment & setup](#environment--setup)
+- [Configuration reference](#configuration-reference)
+- [Development](#development)
+- [Documentation map](#documentation-map)
+- [Changelog](#changelog)
+- [Credit & upstream](#credit--upstream)
+- [Contributing](#contributing)
+- [Support / issues](#support--issues)
+- [License](#license)
+- [Acknowledgements](#acknowledgements)
+
+---
+
 ## Run the whole stack with one command
 
 One `docker compose` command brings up **everything at once** — the web UI,
@@ -122,8 +148,6 @@ cloud scanner.
 
 ---
 
----
-
 ## What the UI actually does
 
 Every part of a scan is driven and inspected from the browser — there is no
@@ -160,9 +184,9 @@ phone-width screen.
 - Access uses short-lived signed links issued by the sidechannels API.
 - Caddy keeps strict security headers globally, but sidechannel routes remove `X-Frame-Options` so noVNC can render inside the dashboard iframe.
 
-Fully responsive — the [previous mobile optimisation pass](#) adapted every
-view to work on phones (hamburger drawer, stacked card tables, scalable
-panels for the live view).
+Fully responsive: every view — including the live run page — adapts down to
+phone width, with a hamburger drawer, stacked card tables in place of wide
+grids, and scalable panels for the live view.
 
 ---
 
@@ -292,10 +316,10 @@ See **[docs/INSTALL_UBUNTU.md](docs/INSTALL_UBUNTU.md)** for the full guide
 
 ---
 
-## CLI — original Strix agent (unchanged)
+## CLI usage
 
-The standalone Strix CLI is preserved end-to-end. You can still use it on
-its own, without running the dashboard.
+The standalone Strix CLI is preserved end-to-end and unchanged. You can
+still use it on its own, without running the dashboard at all.
 
 **Prerequisites**
 
@@ -351,7 +375,7 @@ and exits non-zero when vulnerabilities are found — drop it into any CI
 pipeline:
 
 ```yaml
-name: nova-pentest
+name: lantern-pentest
 on: [pull_request]
 jobs:
   security-scan:
@@ -403,19 +427,19 @@ jobs:
 ## Architecture
 
 ```
-                       ┌──────────────────────────┐
- Internet ───────────► │  Caddy  (port 80 / 443)  │
-                       └──────────┬───────────────┘
-                                  │ strix_net (bridge)
-                  ┌───────────────┼───────────────┐
-                  │               │               │
-           frontend (3000)   api (8000)    postgres / redis
-           Next.js 16         FastAPI        state + cache
-                                  │
-                          ┌───────┴────────┐
-                          │ Strix/Lantern │
-                          │ agent core + tools│
-                          └────────────────┘
+Internet
+   │
+   ▼
+Caddy — the only host port (80, or 443 once TLS is on)
+   │
+   │  strix_net — internal Docker bridge network
+   │
+   ├── frontend    :3000   Next.js 16 dashboard
+   ├── api         :8000   FastAPI control plane
+   │                       └─ spawns the Strix agent core in its own
+   │                          throwaway sandbox container per scan
+   ├── postgres    internal only   findings, runs, history
+   └── redis       internal only   live updates, rate limits
 ```
 
 - Only Caddy binds a host port. Postgres and Redis are unreachable from
@@ -579,49 +603,21 @@ Strix CLI. The CLI has its own install flow documented above.
 
 ---
 
-## What's new in this build
+## Changelog
 
-- **Run control plane**: mid-run `pause` / `resume` / `restart` / `kill` + per-run budget caps.
-- **Operator cockpit**: run-level **Terminals** tab (xterm), **Live Browser** tab (noVNC), and **Burp** tab.
-- **Burp + Caido coexistence**: both available; agents can choose tooling per task.
-- **Persistent shell + netcat workflows**: spawn/read/write/close shells and listener management APIs/UI.
-- **LLM role router**: role-scoped model routes, per-run overrides, role usage/cost telemetry.
-- **Encrypted secret store**: AES-GCM-backed secret references for provider/integration credentials.
-- **Reporting upgrades**: canonical finding schema and exports in `md`, `txt`, `html`, `pdf`, `json`, `sarif`, `csv`.
-- **Program governance**: finding dedup fingerprints, triage lifecycle, retest endpoint, scheduled scans.
-- **Outbound integrations**: webhook, Slack, Discord, Jira, GitHub Issues.
-- **Storage/abuse controls**: retention sweeps + evidence cap trimming + per-host politeness/rate limits.
-- **MCP support**: Lantern as MCP server (`stdio`, `HTTP+SSE`) and MCP client (gallery + custom endpoints).
+Everything below ships in the current build. For the full phase-by-phase
+implementation history, see [`changelogs.md`](changelogs.md).
 
----
-
-## Latest additions (2026-04-25)
-
-- Added **Burp route hardening** so API Burp endpoints execute real Burp tool actions instead of static stubs.
-- Added **durable MCP persistence**:
-  - Postgres tables for MCP servers/tokens when DB is enabled.
-  - File-backed fallback at `STRIX_RUNS_DIR/.config/mcp_registry.json` when Postgres is unavailable.
-- Added **MCP Settings entry** in Settings for easier access to client-side MCP configuration.
-- Added **new test scaffolding**:
-  - `tests/api/test_mcp_routes.py`
-  - `tests/api/test_burp_routes.py`
-  - `tests/tools/test_capabilities_tool.py`
-- Added comprehensive implementation history in `changelogs.md`.
-
-## Latest additions (2026-05-01)
-
-- Added **run restart** support in the control plane:
-  - New `restart` action in run controls and command palette.
-  - Restart reuses the previous run's saved target + scan configuration and starts a fresh run id.
-- Added **NVIDIA NIM model normalization** for LiteLLM compatibility:
-  - Models entered as `mistralai/...` against NIM's OpenAI-compatible endpoint are normalized automatically.
-  - Prevents `LLM Provider NOT provided` errors on NIM setups.
-- Hardened **run shell APIs**:
-  - Shell sessions are auto-created on read/write paths so `default` shell polling does not 500 before explicit spawn.
-- Improved **Runs mobile UX**:
-  - Run detail tabs use horizontal scrolling with non-wrapping tab chips on small screens.
-- Hardened **LLM usage telemetry endpoint**:
-  - Defensive numeric parsing for token/cost aggregation to avoid malformed-event 500s.
+- **Run control plane** — mid-run `pause` / `resume` / `restart` / `kill`, per-run budget caps. Restart reuses the previous run's target and scan config under a fresh run ID.
+- **Operator cockpit** — run-level **Terminals** (xterm), **Live Browser** (noVNC), and **Burp** tabs, plus persistent shell and netcat/listener workflows.
+- **Burp + Caido coexistence** — both available; agents pick tooling per task. Burp routes call real Burp actions, not stubs.
+- **LLM role router** — role-scoped model routes, per-run overrides, role usage/cost telemetry, and automatic model-string normalization for NVIDIA NIM endpoints.
+- **Encrypted secret store** — AES-GCM-backed secret references for provider and integration credentials.
+- **Reporting** — canonical finding schema with exports in `md`, `txt`, `html`, `pdf`, `json`, `sarif`, `csv`.
+- **Program governance** — finding dedup fingerprints, triage lifecycle, retest endpoint, scheduled scans.
+- **Outbound integrations** — webhook, Slack, Discord, Jira, GitHub Issues.
+- **Storage & abuse controls** — retention sweeps, evidence-size trimming, per-host politeness and concurrency limits.
+- **MCP support** — Lantern as an MCP server (`stdio`, `HTTP+SSE`) and MCP client, with durable registry persistence (Postgres, or a file-backed fallback when Postgres is unavailable).
 
 ---
 
@@ -655,8 +651,8 @@ the same way — Lantern extends the project, it does not replace it.
 ## Contributing
 
 **Lantern is open for contributors.** Bug fixes, docs, dashboard UX, API
-endpoints, deploy hardening, and tests are all in scope—open an issue first
-for larger changes so we can align on direction.
+endpoints, deploy hardening, and tests are all in scope — open an issue
+first for larger changes so we can align on direction.
 
 Please open [issues](https://github.com/charanteja0017/Lantern/issues) for
 bugs or ideas, or submit a [pull request](https://github.com/charanteja0017/Lantern/pulls)
@@ -689,6 +685,8 @@ Lantern retains the upstream Strix copyright and license notices. Any
 code written specifically for this fork (the `frontend/`, `strix/api/`,
 `deploy/`, and `scripts/setup.sh`) is contributed under the same
 Apache-2.0 license.
+
+---
 
 ## Acknowledgements
 
