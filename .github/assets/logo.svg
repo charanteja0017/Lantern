@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <radialGradient id="flame" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="55%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- handle -->
+  <path d="M48 24 Q60 6 72 24" stroke="url(#g)" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+
+  <!-- cap -->
+  <path d="M48 24 H72 L93 36 H27 Z" fill="url(#g)" opacity="0.25" stroke="url(#g)" stroke-width="3" stroke-linejoin="round"/>
+
+  <!-- body -->
+  <rect x="27" y="36" width="66" height="51" rx="12" fill="url(#g)" opacity="0.15" stroke="url(#g)" stroke-width="4"/>
+
+  <!-- cage bars -->
+  <path d="M45 36 V87 M75 36 V87" stroke="url(#g)" stroke-width="2" stroke-linecap="round" opacity="0.35"/>
+
+  <!-- base -->
+  <path d="M27 87 H93 L99 102 H21 Z" fill="url(#g)" opacity="0.25" stroke="url(#g)" stroke-width="3" stroke-linejoin="round"/>
+
+  <!-- glow + flame -->
+  <circle cx="60" cy="61.5" r="18" fill="url(#flame)"/>
+  <circle cx="60" cy="61.5" r="7.8" fill="#fbbf24"/>
+</svg>

@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src=".github/assets/logo.svg" alt="Lantern logo" width="96" height="96">
+
 # Lantern
 
 ### A free, self-hosted AI pentesting tool you run on your own machine.
